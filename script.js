@@ -55,11 +55,13 @@ console.log(lengthWords)
 console.log(lengthWords2)
 
 // Task 6
-let first = String(`Variable: %variable name% have type: %type variable%`)
-let second = Number(`Variable: %variable name% have type: %type variable%`)
-let third = Boolean(`Variable: %variable name% have type: %type variable%`)
+let first = `Привет мир`
+let second = 777
+let third = true
 
-console.log(first, second, third)
+console.log(`Variable: first have type: ${typeof first}`)
+console.log(`Variable: second have type: ${typeof second}`)
+console.log(`Variable: third have type: ${typeof third}`)
 
 // Task 7
 let name = prompt('Как тебя зовут?')
