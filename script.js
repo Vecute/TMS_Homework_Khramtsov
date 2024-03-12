@@ -55,6 +55,8 @@ let sum = 0
 for (let key in salaries) {
     sum += salaries[key]
 }
+let averageSum = sum / Object.keys(salaries).length
+console.log(averageSum)
 
 // Task 6
 let user = {
