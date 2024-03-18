@@ -36,12 +36,13 @@ addTodo.addEventListener('click', () => {
     const text = document.createTextNode(value); // Создаем текстовый узел с текстом задачи
     todoContent.appendChild(text); // Добавляем текст в div содержимого задачи
 
-    const date = new Date(); // Получаем текущую дату
+    const date = new Date(); // Получаем текущую дату и время
     const dateString = date.toLocaleDateString('ru-RU'); // Преобразуем дату в строку
-    const dateSpan = document.createElement('span'); // Создаем span для даты
-    dateSpan.textContent = dateString; // Устанавливаем текст span как строку даты
-    dateSpan.className = 'date'; // Присваиваем span класс 'date'
-    todoContent.appendChild(dateSpan); // Добавляем span с датой в div содержимого задачи
+    const timeString = date.toLocaleTimeString('ru-RU'); // Преобразуем время в строку
+    const dateTimeSpan = document.createElement('span'); // Создаем span для даты и времени
+    dateTimeSpan.textContent = `${dateString} ${timeString}`; // Устанавливаем текст span как строку даты и времени
+    dateTimeSpan.className = 'date-time'; // Присваиваем span класс 'date-time'
+    todoContent.appendChild(dateTimeSpan); // Добавляем span с датой и временем в div содержимого задачи
 
     li.appendChild(todoContent); // Добавляем div содержимого задачи в элемент списка
 
