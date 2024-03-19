@@ -161,6 +161,7 @@ function updateCounts() {
 // Функция для загрузки задач из localStorage и отображения их на странице
 function loadTodos() {
     const todos = getDate(); // Получаем текущий список задач из localStorage
+    todoList.innerHTML = ''; // Очистить список задач перед добавлением новых
     todos.forEach(todo => { // Для каждой задачи в списке
         const li = document.createElement('li'); // Создаем новый элемент списка
         li.className = 'todo-item'; // Устанавливаем класс элемента списка
@@ -218,7 +219,12 @@ function loadTodos() {
     updateCounts(); // Обновляем счетчики задач
 }
 
-// Добавляем обработчик события загрузки документа, который вызывает функцию loadTodos
-document.addEventListener("DOMContentLoaded", function(){
+// Добавляем обработчик события загрузки страницы, который вызывает функцию loadTodos
+window.addEventListener("load", function(){
+    loadTodos();
+})
+
+// Добавляем обработчик события на все изменения, для отображения изменений в другой вкладке , который вызывает функцию loadTodos
+window.addEventListener("storage", function(){
     loadTodos();
 })
