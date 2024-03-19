@@ -58,8 +58,8 @@ addTodo.addEventListener('click', () => {
     todoContent.appendChild(text); // Добавляем текст в div содержимого задачи
 
     const date = new Date(); // Получаем текущую дату и время
-    const dateString = date.toLocaleDateString('ru-RU'); // Преобразуем дату в строку
-    const timeString = date.toLocaleTimeString('ru-RU'); // Преобразуем время в строку
+    const dateString = date.toLocaleDateString(); // Преобразуем дату в строку
+    const timeString = date.toLocaleTimeString(); // Преобразуем время в строку
     const dateTimeSpan = document.createElement('span'); // Создаем span для даты и времени
     dateTimeSpan.textContent = `${dateString} ${timeString}`; // Устанавливаем текст span как строку даты и времени
     dateTimeSpan.className = 'date-time'; // Присваиваем span класс 'date-time'
