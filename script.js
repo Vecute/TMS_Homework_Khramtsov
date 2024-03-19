@@ -12,6 +12,21 @@ const showAll = document.getElementById('showAll'); // Кнопка показа
 const showCompleted = document.getElementById('showCompleted'); // Кнопка показа завершенных задач
 const searchInput = document.getElementById('searchInput'); // Поле ввода поиска
 
+// Проверяем, есть ли в localStorage элемент с ключом 'todos'
+if (!localStorage.getItem('todos')) {
+    localStorage.setItem('todos', JSON.stringify([])); // Если его нет, то создаем его с пустым массивом в качестве значения
+}
+
+// Функция для получения данных из localStorage
+function getDate() {
+    return JSON.parse(localStorage.getItem('todos')); // Получаем данные из localStorage с ключом 'todos' и преобразуем их из формата JSON в JavaScript-объект
+}
+
+// Функция для сохранения данных в localStorage
+function setDate(data) {
+    localStorage.setItem('todos', JSON.stringify(data)); // Сохраняем данные в localStorage с ключом 'todos', предварительно преобразовав их в формат JSON
+}
+
 // Обработчик события нажатия на кнопку добавления задачи
 addTodo.addEventListener('click', () => {
     const value = todoInput.value; // Получаем значение из поля ввода
@@ -26,6 +41,12 @@ addTodo.addEventListener('click', () => {
     checkbox.addEventListener('change', () => { // Добавляем обработчик события изменения чекбокса
         todoContent.classList.toggle('completed'); // Переключаем класс 'completed' у содержимого задачи
         li.classList.toggle('checked'); // Переключаем класс 'checked' у элемента списка
+        const todos = getDate(); // Получаем текущий список задач из localStorage
+        const todo = todos.find(t => t.id === Number(li.dataset.id)); // Находим задачу, которая соответствует id элемента списка
+        if (todo) {
+            todo.isChecked = checkbox.checked; // Обновляем состояние 'isChecked' задачи в соответствии со состоянием чекбокса
+        }
+        setDate(todos); // Сохраняем обновленный список задач в localStorage
         updateCounts(); // Обновляем счетчики
     });
     li.appendChild(checkbox); // Добавляем чекбокс в элемент списка
@@ -58,6 +79,18 @@ addTodo.addEventListener('click', () => {
     todoList.appendChild(li); // Добавляем элемент списка в список задач
     todoInput.value = ''; // Очищаем поле ввода
     updateCounts(); // Обновляем счетчики
+
+    const id = Date.now(); // Генерируем уникальный идентификатор для задачи, используя текущее время в миллисекундах
+    li.dataset.id = id; // Сохраняем этот идентификатор в атрибуте data-id элемента списка 
+
+    const todos = getDate(); // Получаем текущий список задач из localStorage
+    todos.push({ // Добавляем новую задачу в список
+        id: id, // Устанавливаем идентификатор задачи
+        date: `${dateString} ${timeString}`, // Устанавливаем дату и время создания задачи
+        text: value, // Устанавливаем текст задачи
+        isChecked: false, // Устанавливаем состояние задачи как 'не выполнено'
+    });
+    setDate(todos); // Сохраняем обновленный список задач в localStorage
 });
 
 // Обработчик события нажатия на кнопку 'Enter' в поле ввода задачи
@@ -73,6 +106,7 @@ deleteAll.addEventListener('click', () => {
     while (todoList.firstChild) { // Пока в списке есть элементы
         todoList.removeChild(todoList.firstChild); // Удаляем первый элемент
     }
+    setDate([]); // Сохраняем пустой массив в localStorage под ключом 'todos'
     updateCounts(); // Обновляем счетчики
 });
 
@@ -81,6 +115,9 @@ deleteLast.addEventListener('click', () => {
     if (todoList.lastChild) { // Если в списке есть последний элемент
         todoList.removeChild(todoList.lastChild); // Удаляем последний элемент
     }
+    const todos = getDate(); // Получаем текущий список задач из localStorage
+    todos.pop(); // Удаляем последнюю задачу из списка
+    setDate(todos); // Сохраняем обновленный список задач в localStorage
     updateCounts(); // Обновляем счетчики
 });
 
@@ -120,3 +157,68 @@ function updateCounts() {
     allCount.textContent = 'All: ' + allTodos; // Обновляем текст счетчика всех задач
     completedCount.textContent = 'Completed: ' + completedTodos; // Обновляем текст счетчика завершенных задач
 }
+
+// Функция для загрузки задач из localStorage и отображения их на странице
+function loadTodos() {
+    const todos = getDate(); // Получаем текущий список задач из localStorage
+    todos.forEach(todo => { // Для каждой задачи в списке
+        const li = document.createElement('li'); // Создаем новый элемент списка
+        li.className = 'todo-item'; // Устанавливаем класс элемента списка
+        li.dataset.id = todo.id; // Сохраняем идентификатор задачи в атрибуте data-id элемента списка
+        if (todo.isChecked) { // Если задача выполнена
+            li.classList.add('checked'); // Добавляем класс 'checked' к элементу списка
+        }
+
+        const checkbox = document.createElement('input'); // Создаем чекбокс
+        checkbox.type = 'checkbox'; // Устанавливаем тип чекбокса
+        checkbox.checked = todo.isChecked; // Устанавливаем состояние чекбокса в соответствии с состоянием задачи
+        checkbox.addEventListener('change', () => { // Добавляем обработчик события изменения чекбокса
+            todoContent.classList.toggle('completed'); // Переключаем класс 'completed' у содержимого задачи
+            li.classList.toggle('checked'); // Переключаем класс 'checked' у элемента списка
+            const todos = getDate(); // Получаем текущий список задач из localStorage
+            const todo = todos.find(t => t.id === Number(li.dataset.id)); // Находим задачу, которая соответствует id элемента списка
+            if (todo) {
+                todo.isChecked = checkbox.checked; // Обновляем состояние 'isChecked' задачи в соответствии со состоянием чекбокса
+            }
+            setDate(todos); // Сохраняем обновленный список задач в localStorage
+            updateCounts(); // Обновляем счетчики задач
+        });
+        li.appendChild(checkbox); // Добавляем чекбокс в элемент списка
+
+        const todoContent = document.createElement('div'); // Создаем контейнер для содержимого задачи
+        todoContent.className = 'todo-content'; // Устанавливаем класс контейнера
+        if (todo.isChecked) { // Если задача выполнена
+            todoContent.classList.add('completed'); // Добавляем класс 'completed' к контейнеру
+        }
+
+        const text = document.createTextNode(todo.text); // Создаем текстовый узел с текстом задачи
+        todoContent.appendChild(text); // Добавляем текстовый узел в контейнер
+
+        const dateTimeSpan = document.createElement('span'); // Создаем элемент span для даты и времени
+        dateTimeSpan.textContent = todo.date; // Устанавливаем текст элемента span в дату и время задачи
+        dateTimeSpan.className = 'date-time'; // Устанавливаем класс элемента span
+        todoContent.appendChild(dateTimeSpan); // Добавляем элемент span в контейнер
+
+        li.appendChild(todoContent); // Добавляем контейнер в элемент списка
+
+        const deleteBtn = document.createElement('button'); // Создаем кнопку удаления
+        deleteBtn.textContent = 'X'; // Устанавливаем текст кнопки
+        deleteBtn.className = 'delete-btn'; // Устанавливаем класс кнопки
+        deleteBtn.addEventListener('click', () => { // Добавляем обработчик события клика на кнопку
+            li.remove(); // Удаляем элемент списка
+            const index = todos.indexOf(todo); // Находим индекс задачи в списке
+            todos.splice(index, 1); // Удаляем задачу из списка
+            setDate(todos); // Сохраняем обновленный список задач в localStorage
+            updateCounts(); // Обновляем счетчики задач
+        });
+        li.appendChild(deleteBtn); // Добавляем кнопку удаления в элемент списка
+
+        todoList.appendChild(li); // Добавляем элемент списка в список задач на странице
+    });
+    updateCounts(); // Обновляем счетчики задач
+}
+
+// Добавляем обработчик события загрузки документа, который вызывает функцию loadTodos
+document.addEventListener("DOMContentLoaded", function(){
+    loadTodos();
+})
