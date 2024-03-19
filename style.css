@@ -98,7 +98,7 @@ input[type="checkbox"] {
 .completed {
     text-decoration: line-through;
 }
-.date {
+.date-time {
     font-size: 0.8em;
     color: gray;
 }
