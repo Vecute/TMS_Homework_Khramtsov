@@ -91,6 +91,7 @@ input[type="checkbox"] {
     accent-color: #4CAF50;
     outline: none;
     border-radius: 5px;
+    cursor: pointer;
 }
 .checked {
     background-color: #baeeb5;
