@@ -1,7 +1,5 @@
-import './style.css';
-const homework = document.createElement('div');
-homework.innerHTML = 'Homework 34';
-document.body.append(homework);
+import { Faculty, Movie } from "./types";
+import './styles.scss';
 // Task 1
 // const faculties = [
 //     {
@@ -29,14 +27,6 @@ document.body.append(homework);
 //         countStudents: 37
 //     }
 // ];
-
-type Faculty = {
-    id: number;
-    faculty: string;
-    subjects: string[];
-    countStudents: number;
-};
-
 const faculties: Faculty[] = [
     {
         id: 1,
@@ -106,25 +96,6 @@ console.log(faculties);
 //         production: "Heyday Films, Moving Picture Company, WarnerBros.",
 //     },
 // ];
-type Movie = {
-    id: number;
-    title: string;
-    year: number;
-    released: string;
-    runtime: string;
-    genre: string[];
-    director: string;
-    writer: string;
-    actors: string[];
-    plot: string;
-    country: string;
-    poster: string;
-    imdbRating: number;
-    imdbVotes: number;
-    type: string;
-    boxOffice: string;
-    production: string;
-}
 const movies: Movie[] = [
     {
         id: 1,

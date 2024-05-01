@@ -1,36 +1,44 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { HotModuleReplacementPlugin } = require('webpack');
 
 module.exports = {
+  mode: 'development',
   entry: './src/index.ts',
-  mode: "development",
   output: {
-    filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    hot: true,
+  },
+  resolve: {
+    extensions: ['.ts', '.js'],
   },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         use: 'ts-loader',
         exclude: /node_modules/,
       },
       {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'sass-loader',
+        ],
       },
     ],
   },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-  },
-  devtool: 'source-map',
-  devServer: {
-    static: './dist',
-    compress: true,
-    port: 9000,
-  },
   plugins: [
-    new HtmlWebpackPlugin()
-  ]
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+    }),
+    new HotModuleReplacementPlugin(),
+  ],
 };
