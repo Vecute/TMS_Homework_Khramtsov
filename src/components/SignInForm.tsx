@@ -42,10 +42,10 @@ const SignInForm = (props: SignInFormProps) => {
           className='signInForm__input'
         />
       </div>
-      <a href="https://htmlbook.ru/" className='signInForm__forgot'>Forgot password?</a>
+      <span className='signInForm__forgot links' onClick={() => onChangePage("Sign Up")}>Forgot password?</span>
       <button type="submit" className='signInForm__button' onClick={() => onChangePage("Posts")}>Sign In</button>
       <p className='signInForm__signUp'>
-        Don't have an account? <a href="https://htmlbook.ru/" onClick={() => onChangePage("Sign Up")}>Sign Up</a>
+        Don't have an account? <span className='links' onClick={() => onChangePage("Sign Up")}>Sign Up</span>
       </p>
     </form>
     <button onClick={() => onChangePage("Posts")} className='buttonBack'>Return to posts</button>

@@ -80,7 +80,7 @@ const SignUpForm = (props: SignUpFormProps) => {
           Sign Up
         </button>
         <p className="signUpForm__signIn">
-          Already have an account? <a href="https://htmlbook.ru/" onClick={() => onChangePage("Sign In")}>Sign In</a>
+          Already have an account? <span className='links' onClick={() => onChangePage("Sign In")}>Sign In</span>
         </p>
       </form>
       <button onClick={() => onChangePage("Posts")} className='buttonBack'>Return to posts</button>
