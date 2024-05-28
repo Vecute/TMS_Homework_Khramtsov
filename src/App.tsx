@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import "./styles/App.scss";
 import DarkModeToggle from "./components/DarkModeToggle";
 import PostList from "./components/PostList";
