@@ -1,0 +1,9 @@
+.header {
+    background-color: var(--accent-color);
+    color: var(--accent-font-color);
+    &__container{
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
+  }

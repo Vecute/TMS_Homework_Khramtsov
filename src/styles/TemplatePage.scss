@@ -1,0 +1,14 @@
+.template {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    justify-content: center;
+    &__title {
+        font-size: 34px;
+        margin-bottom: 10px;
+    }
+    &__container {
+        display: flex;
+        justify-content: center;
+    }
+}
