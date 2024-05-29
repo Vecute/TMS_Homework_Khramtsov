@@ -1,5 +1,6 @@
 :root {
     --font-color: #333333;
+    --border-hover-color: #333333;
     --background-color: #eeeeee;
     --border-color: #dddddd;
     --link-color: #6495ed;
@@ -10,6 +11,7 @@
   
   [data-theme="dark"] {
     --font-color: #eeeeee;
+    --border-hover-color: #eeeeee;
     --background-color: #333333;
     --border-color: #97979738;
     --link-color: #add8e6;
