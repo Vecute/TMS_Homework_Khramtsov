@@ -48,7 +48,7 @@ export const PostCard = (props: PostProps) => {
       {image && <img src={image} alt={title} />}
       <h2>{title}</h2>
       <p className="post-card__description">{content}</p>
-      <p>{publishedAt}</p>
+      <p className="post-card__date">{publishedAt}</p>
       <div className="post-card__bottom-menu">
         <div className="post-card__likes-menu">
           <div
