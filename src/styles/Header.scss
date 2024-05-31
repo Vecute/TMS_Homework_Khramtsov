@@ -5,5 +5,8 @@
       display: flex;
       justify-content: space-between;
       padding: 10px;
+      @media only screen and (max-width: 400px) {
+        flex-wrap: wrap;
+      }
     }
   }
