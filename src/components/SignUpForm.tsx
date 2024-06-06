@@ -1,51 +1,68 @@
-import React, { useEffect } from "react";
-import "../styles/SignUpForm.scss";
-import useInput from "../customHooks/useInput";
+import "../styles/SignUpForm.scss"; // Импорт стилей для формы регистрации
+import useInput from "../customHooks/useInput"; // Импорт пользовательского хука для управления вводом
+import React, { useEffect, useRef, useState } from "react"; // Импорт React и некоторых хуков
+import { useNavigate, Link } from "react-router-dom"; // Импорт хука для навигации и компонента для ссылок
 
+// Определение интерфейса для свойств формы регистрации
 interface SignUpFormProps {
-  onChangePage: (value: string) => void;
+  onSubmit: (value: string) => void;
 }
 
 const SignUpForm = (props: SignUpFormProps) => {
-  const { onChangePage } = props;
-  // Используем кастомный хук useInput для управления состоянием полей ввода
+  // Использование пользовательского хука для управления вводом для каждого поля ввода
   const name = useInput("");
   const email = useInput("");
   const password = useInput("");
   const confirmPassword = useInput("");
+  const navigate = useNavigate(); // Хук для навигации по маршрутам
 
-  // Создаем массив из объектов, возвращаемых хуком useInput
+  // Массив, содержащий все поля ввода
   const inputs = [name, email, password, confirmPassword];
 
-  // Используем хук useEffect для установки фокуса на первое поле ввода при монтировании компонента
-  useEffect(() => {
-    if (inputs[0].ref.current) {
-      inputs[0].ref.current.focus();
-    }
-  });
+  // Создание ссылки для фокусировки на элементе ввода
+  const focusRef = useRef<HTMLInputElement | null>(null);
+  // Состояние для отслеживания первого рендеринга
+  const [isInitialRender, setIsInitialRender] = useState(true);
 
-  // Определяем функцию-обработчик события отправки формы
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // Проверяем каждое поле ввода на пустоту
-    for (const input of inputs) {
-      if (input.value === '') {
-        // Если поле пустое, устанавливаем его валидность в false и устанавливаем на нем фокус
-        input.setIsValid(false);
-        if (input.ref.current) {
-          input.ref.current.focus();
-        }
-        return;
-      }
-      // Если поле не пустое, устанавливаем его валидность в true
-      input.setIsValid(true);
+  // Хук эффекта для установки фокуса на первое поле ввода при первом рендеринге
+  useEffect(() => {
+    if (isInitialRender && name.ref.current) {
+      name.ref.current.focus();
+      setIsInitialRender(false);
     }
-    console.log("Name:", name.value);
-    console.log("Email:", email.value);
-    console.log("Password:", password.value);
-    console.log("Confirm Password:", confirmPassword.value);
-    // Вызываем функцию onChangePage для перехода на страницу "Registration Confirmation"
-    onChangePage("Registration Confirmation");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Обработчик отправки формы
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault(); // Предотвращение стандартного поведения формы
+
+    let isValid = true; // Переменная для проверки валидности формы
+    focusRef.current = null; // Сброс ссылки на элемент для фокусировки
+
+    // Проверка каждого поля ввода на пустоту
+    for (const input of inputs) {
+      if (input.value === "") {
+        input.setIsValid(false); // Установка состояния валидности в false
+        isValid = false; // Установка валидности формы в false
+        if (!focusRef.current) {
+          focusRef.current = input.ref.current; // Установка ссылки на первое невалидное поле ввода
+        }
+      } else {
+        input.setIsValid(true); // Установка состояния валидности в true
+      }
+    }
+
+    // Если форма валидна, выводим значения полей ввода и переходим на страницу подтверждения регистрации
+    if (isValid) {
+      console.log("Name:", name.value);
+      console.log("Email:", email.value);
+      console.log("Password:", password.value);
+      console.log("Confirm Password:", confirmPassword.value);
+      navigate("/registration-confirmation");
+    } else if (focusRef.current) {
+      focusRef.current.focus(); // Установка фокуса на первое невалидное поле ввода
+    }
   };
 
   return (
@@ -109,10 +126,10 @@ const SignUpForm = (props: SignUpFormProps) => {
         </div>
         <button type="submit" className="signUpForm__button">Sign Up</button>
         <p className="signUpForm__signIn">
-          Already have an account? <span className='links' onClick={() => onChangePage("Sign In")}>Sign In</span>
+          Already have an account? <Link to="/sign-in" className='links'>Sign In</Link>
         </p>
       </form>
-      <button onClick={() => onChangePage("Posts")} className='buttonBack'>Return to posts</button>
+      <button onClick={() => navigate("/posts")} className='buttonBack'>Return to posts</button>
     </div>
   );
 };

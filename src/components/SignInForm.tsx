@@ -1,48 +1,60 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/SignInForm.scss';
 import useInput from "../customHooks/useInput";
+import { useNavigate, Link } from "react-router-dom";
 
 interface SignInFormProps {
-  onChangePage: (value: string) => void;
+  onSubmit: (value: string) => void;
 }
 
 const SignInForm = (props: SignInFormProps) => {
-  const { onChangePage } = props;
-  // Используем кастомный хук useInput для управления состоянием полей ввода
-  const email = useInput('');
-  const password = useInput('');
+  const email = useInput(''); // Используем кастомный хук для управления значением поля ввода email
+  const password = useInput(''); // Используем кастомный хук для управления значением поля ввода password
+  const navigate = useNavigate(); // Используем хук для навигации по страницам
+  const inputs = [email, password]; // Создаем массив из полей ввода
 
-  // Создаем массив из объектов, возвращаемых хуком useInput
-  const inputs = [email, password];
+  const focusRef = useRef<HTMLInputElement | null>(null);
 
-  // Используем хук useEffect для установки фокуса на первое поле ввода при монтировании компонента
+  // Создаем состояние для отслеживания первичной загрузки
+  const [isInitialRender, setIsInitialRender] = useState(true);
+
   useEffect(() => {
-    if (inputs[0].ref.current) {
-      inputs[0].ref.current.focus();
+    // При монтировании компонента устанавливаем фокус на первый инпут
+    if (isInitialRender && email.ref.current) {
+      email.ref.current.focus();
+      setIsInitialRender(false);
     }
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Выполняем useEffect только один раз при монтировании
 
-  // Определяем функцию-обработчик события отправки формы
+  // Обработчик отправки формы
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // Проверяем каждое поле ввода на пустоту
-    for (const input of inputs) {
-      if (input.value === '') {
-        // Если поле пустое, устанавливаем его валидность в false и устанавливаем на нем фокус
-        input.setIsValid(false);
-        if (input.ref.current) {
-          input.ref.current.focus();
+    event.preventDefault(); // Отменяем стандартное поведение формы при отправке, чтобы страница не перезагружалась
+
+    let isValid = true; // Переменная для отслеживания валидности всех полей формы
+    focusRef.current = null; // Сбрасываем ссылку на элемент, который нужно будет сфокусировать
+
+    for (const input of inputs) { // Проходим по каждому полю ввода в форме
+      if (input.value === '') { // Если поле ввода пустое...
+        input.setIsValid(false); // ...то устанавливаем его состояние как невалидное...
+        isValid = false; // ...и общее состояние валидности формы делаем невалидным
+        if (!focusRef.current) { // Если еще не установлена ссылка на элемент для фокуса...
+          focusRef.current = input.ref.current; // ...то устанавливаем ее на текущее поле ввода
         }
-        return;
+      } else { // Если поле ввода не пустое...
+        input.setIsValid(true); // ...то устанавливаем его состояние как валидное
       }
-      // Если поле не пустое, устанавливаем его валидность в true
-      input.setIsValid(true);
     }
-    console.log('Email:', email.value);
-    console.log('Password:', password.value);
-    // Вызываем функцию onChangePage для перехода на страницу "Posts"
-    onChangePage("Posts");
+
+    if (isValid) { // Если все поля формы валидны...
+      console.log('Email:', email.value); // ...то выводим в консоль значение поля ввода email...
+      console.log('Password:', password.value); // ...и значение поля ввода password...
+      navigate("/posts"); // ...и переходим на страницу с постами
+    } else if (focusRef.current) { // Если есть ссылка на элемент для фокуса...
+      focusRef.current.focus(); // ...то устанавливаем на него фокус
+    }
   };
+
 
   return (
     <div>
@@ -71,13 +83,13 @@ const SignInForm = (props: SignInFormProps) => {
             className={`signInForm__input ${!password.isValid ? 'invalid' : ''}`}
           />
         </div>
-        <span className='signInForm__forgot links' onClick={() => onChangePage("Sign Up")}>Forgot password?</span>
+        <Link to="/sign-up" className='links signInForm__forgot'>Forgot password?</Link>
         <button type="submit" className='signInForm__button'>Sign In</button>
         <p className='signInForm__signUp'>
-          Don't have an account? <span className='links' onClick={() => onChangePage("Sign Up")}>Sign Up</span>
+          Don't have an account? <Link to="/sign-up" className='links'>Sign Up</Link>
         </p>
       </form>
-      <button onClick={() => onChangePage("Posts")} className='buttonBack'>Return to posts</button>
+      <button onClick={() => navigate("/posts")} className='buttonBack'>Return to posts</button>
     </div>
   );
 };

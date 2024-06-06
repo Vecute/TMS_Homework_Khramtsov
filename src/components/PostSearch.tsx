@@ -1,7 +1,7 @@
+import '../styles/PostSearch.scss';
+import useSearch from "../customHooks/useSearch";
 import { useState, useEffect } from 'react';
 import { PostCard, PostProps } from './PostCard';
-import '../styles/PostSearch.scss';
-import { useSearch } from './SearchButton';
 
 const PostSearch = () => {
   const [posts, setPosts] = useState<Array<PostProps>>([]); // Использование хука состояния для хранения списка постов

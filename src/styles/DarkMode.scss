@@ -1,71 +1,105 @@
 :root {
-    --font-color: #333333;
-    --border-hover-color: #333333;
-    --background-color: #eeeeee;
-    --border-color: #dddddd;
-    --link-color: #6495ed;
-    --shadow-color: #00000033;
-    --accent-color: #1e2cb1;
-    --accent-font-color: #eeeeee;
+  --font-color: #444444;
+  --secondary-font-color: #555454;
+  --background-color: #eeeeee;
+  --link-color: #6495ed;
+  --link-hover-color: #444444;
+  --icon-color: #252f3a;
+  --icon-hover-color: #6495ed;
+  --icon-accent-color: #ffc10a;
+  --button-font-color: #ffffff;
+  --button-background-color: #6495ed;
+  --button-border-color: #333333;
+  --button-font-hover-color: #444444;
+  --button-background-hover-color: #eeeeee;
+  --button-border-hover-color: #333333;
+  --header-background-color: #eeeeee;
+  --header-border-color: #eeeeee;
+  --header-font-color: #444444;
+  --header-hover-color: #6495ed;
+  --header-font-hover-color: #ffffff;
+  --border-hover-color: #333333;
+  --input-border-color: #252f3a;
+  --input-background-color: #ffffff;
+  --error-color: #ff0000;
+  --shadow-color: #00000033;
+  --border-color: #eeeeee;
+}
+
+[data-theme="dark"] {
+  --font-color: #eeeeee;
+  --secondary-font-color: #eeeeeebe;
+  --background-color: #333333;
+  --link-color: #6495ed;
+  --link-hover-color: #eeeeee;
+  --icon-color: #eeeeee;
+  --icon-hover-color: #88afff;
+  --button-font-color: #eeeeee;
+  --button-background-color: #4a79c2;
+  --button-border-color: #6495ed;
+  --button-font-hover-color: #eeeeee;
+  --button-background-hover-color: #000000;
+  --button-border-hover-color: #6495ed;
+  --header-background-color: #000000;
+  --header-border-color: #333333;
+  --header-font-color: #eeeeee;
+  --header-hover-color: #4a79c2;
+  --header-font-hover-color: #eeeeee;
+  --border-hover-color: #6495ed;
+  --input-border-color: #eeeeee;
+  --input-background-color: #eeeeee;
+  --shadow-color: #8680804d;
+  --border-color: #333333;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--font-color);
+}
+
+.links {
+  color: var(--link-color);
+  cursor: pointer;
+  &:hover {
+    color: var(--link-hover-color);
   }
-  
-  [data-theme="dark"] {
-    --font-color: #eeeeee;
-    --border-hover-color: #eeeeee;
-    --background-color: #333333;
-    --border-color: #97979738;
-    --link-color: #add8e6;
-    --shadow-color: #c2bdbd26;
-  }
-  
-  body {
-    background-color: var(--background-color);
-    color: var(--font-color);
-  }
-  
-  .links {
-    color: var(--link-color);
-    cursor: pointer;
-    &:hover {
-      color: var(--accent-color);
-    }
-  }
+}
 
 .toggle-theme-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 4px;
-  }
-  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px;
+}
 
-  .theme-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    border-radius: 50%;
-    margin-right: 10px;
-    background-color: transparent;
-    cursor: pointer; 
-    width: 35px;
-    height: 35px;
-    transition: all 0.3s linear;
-    &.light {
-      &:hover svg {
-        fill: #FFC10A;
-      }
-      &.active {
-        background-color: var(--background-color);
-      }
+.theme-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  transition: all 0.3s linear;
+  position: relative;
+  &.light {
+    &:hover svg {
+      fill: var(--icon-accent-color);
     }
-  
-    &.dark {
-      &:hover svg {
-        fill: #FFC10A;
-      }
-      &.active {
-        background-color: var(--background-color);
-      }
+    &.active {
+      background-color: var(--icon-color);
     }
   }
+
+  &.dark {
+    &:hover svg {
+      fill: var(--icon-accent-color);
+    }
+    &.active {
+      background-color: var(--icon-color);
+    }
+  }
+}

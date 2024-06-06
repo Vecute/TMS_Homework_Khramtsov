@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/TemplatePage.scss';
-import { useSearch } from './SearchButton';
+import useSearch from '../customHooks/useSearch';
 
 interface TemplatePageProps {
     title: string;

@@ -1,6 +1,6 @@
 .search {
   &-list {
-    display: flex;
+    display: grid;
     flex-direction: column;
     row-gap: 10px;
     & .post {
@@ -37,6 +37,7 @@
           grid-column: span 2;
           grid-row: span 1;
           order: 3;
+          color: var(--font-color);
           @media only screen and (max-width: 350px) {
             font-size: 20px;
           }
@@ -58,7 +59,7 @@
     border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 30px;
-    box-shadow: 0 4px 8px 0 var(--shadow-color);
+    box-shadow: 0 0 8px 0 var(--shadow-color);
     font-size: 40px;
     @media only screen and (max-width: 430px) {
       font-size: 30px;

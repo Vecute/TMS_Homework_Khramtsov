@@ -1,61 +1,45 @@
-import { useState } from "react";
 import "./styles/App.scss";
-import DarkModeToggle from "./components/darkTheme/DarkModeToggle";
 import ThemeProvider from "./components/darkTheme/ThemeProvider";
-import PostList from "./components/PostList";
-import PostSearch from "./components/PostSearch";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import TemplatePage from "./components/TemplatePage";
-import SignUpForm from "./components/SignUpForm";
-import SignInForm from "./components/SignInForm";
-import RegistrationConfirmation from "./components/RegistrationConfirmation";
-import EmailConfirmed from "./components/EmailConfirmed";
-import RenderButton from "./components/RenderButton";
+import AccountButton from "./components/AccountButton";
 import SearchButton, { SearchProvider } from "./components/SearchButton";
+import BurgerMenu from "./components/BurgerMenu";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PostsPage from "./pages/PostsPage";
+import PostPage from "./pages/PostPage";
+import SearchPage from "./pages/SearchPage";
+import SignUpPage from "./pages/SignUpPage";
+import SignInPage from "./pages/SignInPage";
+import RegistrationConfirmationPage from "./pages/RegistrationConfirmationPage";
+import EmailConfirmedPage from "./pages/EmailConfirmedPage";
 
 function App() {
-  const [activeComponent, setActiveComponent] = useState<string | null>(
-    "Posts"
-  );
   return (
     <div className="App">
       <ThemeProvider>
-      <SearchProvider>
-        <Header>
-          <DarkModeToggle />
-          <div className="buttons">
-              <SearchButton onChangePage={setActiveComponent} />
-            <RenderButton
-              title="Sign Up"
-              onButtonClick={setActiveComponent}
-              buttonType="account-button"
-            />
-          </div>
-        </Header>
-          {activeComponent && (
-            <TemplatePage title={activeComponent}>
-              {activeComponent === "Posts" && <PostList />}
-              {activeComponent === "Search" && <PostSearch />}
-              {activeComponent === "Sign Up" && (
-                <SignUpForm onChangePage={setActiveComponent} />
-              )}
-              {activeComponent === "Sign In" && (
-                <SignInForm onChangePage={setActiveComponent} />
-              )}
-              {activeComponent === "Registration Confirmation" && (
-                <RegistrationConfirmation onChangePage={setActiveComponent} />
-              )}
-              {activeComponent === "Success" && (
-                <EmailConfirmed onChangePage={setActiveComponent} />
-              )}
-            </TemplatePage>
-          )}
-
-        <Footer>
-          <p>2024</p>
-          <p>All rights reserved</p>
-        </Footer>
+        <SearchProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<PostsPage />} />
+              <Route path="/posts" element={<PostsPage />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/sign-up" element={<SignUpPage />} />
+              <Route path="/sign-in" element={<SignInPage />} />
+              <Route path="/registration-confirmation" element={<RegistrationConfirmationPage />} />
+              <Route path="/success" element={<EmailConfirmedPage />} />
+              <Route path="/posts/:postId" element={<PostPage />} />
+            </Routes>
+            <Header>
+              <BurgerMenu />
+              <SearchButton />
+              <AccountButton />
+            </Header>
+            <Footer>
+              <p>2024</p>
+              <p>All rights reserved</p>
+            </Footer>
+          </BrowserRouter>
         </SearchProvider>
       </ThemeProvider>
     </div>

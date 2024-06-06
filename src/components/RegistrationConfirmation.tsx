@@ -1,22 +1,19 @@
 import "../styles/RegistrationConfirmation.scss";
+import { useNavigate } from "react-router-dom";
 
-interface RegistrationConfirmationProps {
-  onChangePage: (value: string) => void;
-}
-
-const RegistrationConfirmation = (props: RegistrationConfirmationProps) => {
-  const { onChangePage } = props;
+const RegistrationConfirmation = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="registration">
         <p className="registration__text">
-          Your registration process is completed.
+        We have sent an email to your email address to confirm registration. Check your incoming messages.
         </p>
-        <button type="submit" className="registration__button" onClick={() => onChangePage("Success")}>
-          I confirmed email
+        <button onClick={() => navigate("/success")} type="submit" className="registration__button" >
+          I confirmed my email
         </button>
       </div>
-      <button onClick={() => onChangePage("Posts")} className="buttonBack">
+      <button onClick={() => navigate("/posts")} className="buttonBack">
         Return to posts
       </button>
     </div>

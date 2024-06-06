@@ -1,52 +1,86 @@
 .post {
   &__icons {
     cursor: pointer;
+    width: 20px;
+    height: 20px;
     & path {
-      fill: var(--font-color);
+      fill: var(--icon-color);
       transition: all 0.3s linear;
     }
+
     &:hover path {
-      fill: var(--accent-color);
+      fill: var(--icon-hover-color);
+    }
+
+    &-container {
+      display: flex;
+      align-items: center;
     }
   }
+
   &-list {
-    display: grid; 
+    display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-gap: 10px;
     grid-auto-flow: dense;
+
     @media only screen and (max-width: 1540px) {
       grid-template-columns: repeat(7, 1fr);
     }
+
     @media only screen and (max-width: 1300px) {
       grid-template-columns: repeat(6, 1fr);
     }
+
     @media only screen and (max-width: 1200px) {
       grid-template-columns: repeat(5, 1fr);
     }
+
     @media only screen and (max-width: 970px) {
       grid-template-columns: repeat(4, 1fr);
     }
+
     @media only screen and (max-width: 780px) {
       grid-template-columns: repeat(3, 1fr);
     }
+
     @media only screen and (max-width: 630px) {
       grid-template-columns: repeat(2, 1fr);
     }
+
     @media only screen and (max-width: 440px) {
       grid-template-columns: repeat(1, 1fr);
     }
   }
 
+  &-empty {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 8px 0 var(--shadow-color);
+    font-size: 40px;
+
+    @media only screen and (max-width: 430px) {
+      font-size: 30px;
+    }
+
+    @media only screen and (max-width: 350px) {
+      font-size: 24px;
+    }
+  }
+
   &-card {
+    text-decoration: none;
+    color: var(--font-color);
     border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 8px 0 var(--shadow-color);
+    box-shadow: 0 0 8px 0 var(--shadow-color);
     transition: 0.3s;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
     transition: all 0.3s linear;
+
     & .post-card__description {
       display: none;
     }
@@ -55,18 +89,21 @@
       display: flex;
       justify-content: space-between;
     }
+
     &__likes-menu {
       display: flex;
       justify-content: space-between;
       column-gap: 5px;
       align-items: center;
     }
+
     &__extra-menu {
       display: flex;
       justify-content: space-between;
       column-gap: 5px;
       align-items: center;
     }
+
     &:hover {
       box-shadow: 0 8px 16px 0 var(--shadow-color);
       border: 1px solid var(--border-hover-color);
@@ -75,14 +112,18 @@
     & img {
       width: 100%;
       height: auto;
+      margin-bottom: 5px;
     }
 
     & h2 {
       font-size: 24px;
+      margin-bottom: 5px;
     }
 
     & p {
       font-size: 16px;
+      margin-bottom: 5px;
+      color: var(--secondary-font-color);
     }
   }
 }
@@ -95,6 +136,7 @@
 .medium {
   grid-column: span 2;
   grid-row: span 1;
+
   @media only screen and (max-width: 440px) {
     grid-column: span 1;
     grid-row: span 1;
@@ -104,24 +146,70 @@
 .large {
   grid-column: span 3;
   grid-row: span 1;
+
   @media only screen and (max-width: 630px) {
     grid-column: span 2;
     grid-row: span 1;
   }
+
   @media only screen and (max-width: 440px) {
     grid-column: span 1;
     grid-row: span 1;
   }
 }
 
-.liked {
-  & path {
-    fill: var(--accent-color);
-  }
-}
+.post {
+  & .template-title {
+    max-width: 70%;
 
-.disliked {
-  &:hover path {
-    fill: var(--accent-color);
+    @media only screen and (max-width: 1000px) {
+      max-width: 100%;
+    }
+  }
+
+  &-single {
+    max-width: 70%;
+
+    @media only screen and (max-width: 1000px) {
+      max-width: 100%;
+    }
+
+    & .post-card {
+      box-shadow: none;
+      border: none;
+
+      &:hover {
+        box-shadow: none;
+        border: none;
+      }
+
+      & img {
+        width: 100%;
+        height: auto;
+        align-self: center;
+        margin-bottom: 10px;
+      }
+
+      & .post-card__description {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 24px;
+        @media only screen and (max-width: 600px) {
+          font-size: 20px;
+        }
+      }
+
+      & p {
+        margin-bottom: 10px;
+      }
+
+      & h2 {
+        display: none;
+      }
+    }
+
+    & .buttonBack {
+      margin-left: 20px;
+    }
   }
 }
