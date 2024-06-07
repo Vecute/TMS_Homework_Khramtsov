@@ -65,7 +65,7 @@
         top: 55px;
         transition: all .3s linear;
         background-color: var(--header-background-color);
-        height: calc(100dvh - 55px);
+        height: calc(100vh - 55px);
         display: grid;
         grid-template-rows: auto auto 1fr auto;
         min-width: 150px;
