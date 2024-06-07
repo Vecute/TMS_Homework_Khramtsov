@@ -65,13 +65,12 @@
         top: 55px;
         transition: all .3s linear;
         background-color: var(--header-background-color);
-        height: calc(100vh - 55px);
+        height: calc(100dvh - 55px);
         display: grid;
         grid-template-rows: auto auto 1fr auto;
         min-width: 150px;
         border-right: 1px solid var(--header-border-color);
         box-shadow: 4px 8px 8px 0 var(--shadow-color);
-        padding-bottom: env(safe-area-inset-bottom);
         &.open {
             left: 0;
         }
