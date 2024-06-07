@@ -71,8 +71,6 @@
         min-width: 150px;
         border-right: 1px solid var(--header-border-color);
         box-shadow: 4px 8px 8px 0 var(--shadow-color);
-        transition: all .3s linear;
-        transition-property: all, except height;
         &.open {
             left: 0;
         }
