@@ -8,6 +8,10 @@
   font-style: normal;
 }
 
+body {
+  padding-bottom: env(safe-area-inset-bottom, 12px); 
+}
+
 .App {
   display: grid;
   grid-auto-columns: 1fr;
