@@ -3,6 +3,7 @@
     cursor: pointer;
     width: 20px;
     height: 20px;
+
     & path {
       fill: var(--icon-color);
       transition: all 0.3s linear;
@@ -113,6 +114,7 @@
       width: 100%;
       height: auto;
       margin-bottom: 5px;
+      border-radius: 5px;
     }
 
     & h2 {
@@ -174,6 +176,10 @@
       max-width: 100%;
     }
 
+    & .post-card__options {
+      display: none;
+    }
+
     & .post-card {
       box-shadow: none;
       border: none;
@@ -194,6 +200,7 @@
         display: block;
         margin-bottom: 10px;
         font-size: 24px;
+
         @media only screen and (max-width: 600px) {
           font-size: 20px;
         }

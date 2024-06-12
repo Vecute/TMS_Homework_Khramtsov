@@ -1,5 +1,4 @@
 import "./styles/App.scss";
-import ThemeProvider from "./components/darkTheme/ThemeProvider";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AccountButton from "./components/AccountButton";
@@ -13,11 +12,14 @@ import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
 import RegistrationConfirmationPage from "./pages/RegistrationConfirmationPage";
 import EmailConfirmedPage from "./pages/EmailConfirmedPage";
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
+
 
 function App() {
   return (
-    <div className="App">
-      <ThemeProvider>
+    <Provider store={store}>
+      <div className="App">
         <SearchProvider>
           <BrowserRouter>
             <Routes>
@@ -41,8 +43,8 @@ function App() {
             </Footer>
           </BrowserRouter>
         </SearchProvider>
-      </ThemeProvider>
-    </div>
+      </div>
+    </Provider>
   );
 }
 

@@ -1,16 +1,33 @@
-import React, { useContext } from "react";
-import ThemeContext from "./ThemeContext";
-import "../../styles/DarkMode.scss";
+import React, { useEffect } from "react";
+import "../styles/DarkMode.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../redux/themeReducer"; 
+import { RootState } from "../redux/store";
+
+// Определение констант для светлой и тёмной темы
+const lightTheme = 'light';
+const darkTheme = 'dark';
 
 // Компонент для переключения темы
 const DarkModeToggle: React.FC = () => {
-  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+  const dispatch = useDispatch(); // Использование хука useDispatch для вызова действий Redux
+  const isDarkMode = useSelector((state: RootState) => state.themeReducer.darkMode); // Использование хука useSelector для доступа к текущему состоянию темы в хранилище Redux
+
+  const handleToggleTheme = () => { // Функция для переключения темы, которая вызывает действие toggleTheme
+    dispatch(toggleTheme());
+  };
+
+  useEffect(() => { // Хук useEffect, который выполняется при изменении isDarkMode
+    const theme = isDarkMode ? darkTheme : lightTheme; // Определение текущей темы на основе состояния isDarkMode
+    document.documentElement.setAttribute('data-theme', theme); // Установка атрибута data-theme корневого элемента документа для применения CSS-стилей темы
+    localStorage.setItem('theme', theme);
+  }, [isDarkMode]); // Сохранение текущей темы в localStorage, чтобы она сохранялась при перезагрузке страницы
 
   return (
     <div className="toggle-theme-wrapper">
       <button
         className={`theme-button light ${!isDarkMode ? "active" : ""}`}
-        onClick={toggleTheme}
+        onClick={handleToggleTheme}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +41,7 @@ const DarkModeToggle: React.FC = () => {
       </button>
       <button
         className={`theme-button dark ${isDarkMode ? "active" : ""}`}
-        onClick={toggleTheme}
+        onClick={handleToggleTheme}
       >
         <svg
           viewBox="0 0 32 32"

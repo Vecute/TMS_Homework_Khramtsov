@@ -1,6 +1,7 @@
 import '../styles/PostList.scss';
 import { useState, useEffect } from 'react';
 import { PostCard, PostProps } from './PostCard';
+import { PostModal } from './PostModal';
 
 const sizes = ["small", "medium", "large"] as const; // Определяем константный массив размеров постов
 export type Size = (typeof sizes)[number]; // Определяем тип Size как одно из значений массива sizes
@@ -33,6 +34,7 @@ const PostList = () => {
       {posts.map((post) => ( // Проходим по каждому посту в списке
         <PostCard key={post.id} {...post} /> // И отображаем карточку поста
       ))}
+      <PostModal/>
     </div>
   );
 };

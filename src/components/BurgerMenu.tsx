@@ -1,5 +1,5 @@
 import "../styles/BurgerMenu.scss";
-import DarkModeToggle from "./darkTheme/DarkModeToggle";
+import DarkModeToggle from "./DarkModeToggle";
 import { Fragment, useState, useRef, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 

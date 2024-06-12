@@ -8,6 +8,7 @@
     border-bottom: 1px solid var(--header-border-color);
     box-shadow: 0 4px 8px 0 var(--shadow-color);
     transition: all .3s linear;
+    z-index: 2;
     &__container{
       display: grid;
       grid-auto-rows: 1fr;
