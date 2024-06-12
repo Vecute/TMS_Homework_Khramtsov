@@ -3,18 +3,24 @@ import TemplatePage from "./TemplatePage";
 import { PostProps, PostCard } from "../components/PostCard";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setSelectedImage } from "../redux/imagePopUpReducer";
+import { ImageModal } from "../components/ImageModal";
 
 const PostPage = () => {
-  // Использование хука useParams для получения параметра postId из URL
+  // Получение ID поста из параметров URL
   const { postId } = useParams();
-  // Использование хука useState для управления состоянием поста, загрузки и ошибок
+
+  // Инициализация состояния для хранения информации о посте, состояния загрузки и ошибки
   const [post, setPost] = useState<PostProps | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // Использование хука useNavigate для перехода на другие страницы
-  const navigate = useNavigate();
 
-  // Использование хука useEffect для выполнения запроса к API при загрузке компонента
+  // Инициализация хуков для работы с навигацией и Redux
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Хук useEffect для загрузки информации о посте при монтировании компонента
   useEffect(() => {
     const fetchPost = async () => {
       setIsLoading(true);
@@ -47,9 +53,16 @@ const PostPage = () => {
 
     // Вызов функции fetchPost
     fetchPost();
-  }, [postId]); // Зависимость от postId
+  }, [postId]);
 
-  // Рендеринг различных состояний компонента
+  // Обработчик клика по изображению в посте, который открывает модальное окно с изображением
+  const handleOpenImagePopUp = () => {
+    if (post?.image) {
+      dispatch(setSelectedImage(post.image));
+    }
+  };
+
+  // Отображение состояния загрузки, ошибки или сообщения о том, что пост не найден
   if (isLoading) {
     return <div>Post is loading...</div>;
   }
@@ -62,7 +75,6 @@ const PostPage = () => {
     return <div className="post-empty">No posts found 😭</div>;
   }
 
-  // Рендеринг поста, если он загружен
   return (
     <TemplatePage title={post.title}>
       <div className="post-single">
@@ -73,11 +85,13 @@ const PostPage = () => {
           title={post.title}
           image={post.image}
           key={post.id}
+          onImageClick={handleOpenImagePopUp} 
         />
         <button onClick={() => navigate("/posts")} className="buttonBack">
           Return to posts
         </button>
       </div>
+      <ImageModal /> 
     </TemplatePage>
   );
 };

@@ -1,11 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import postPopUpReducer from "./postPopUpReducer";
 import themeReducer from "./themeReducer";
+import imagePopUpReducer from "./imagePopUpReducer";
 
 // Создание главного редюсера путем объединения редюсеров с помощью функции combineReducers
 const combineReducer = combineReducers({
         postPopUpReducer,     // Редюсер для всплывающего окна с постом
         themeReducer,         // Редюсер для темы
+        imagePopUpReducer,    // Редюсер для всплывающего окна с картинкой
     }
 )
 
