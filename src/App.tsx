@@ -14,7 +14,7 @@ import RegistrationConfirmationPage from "./pages/RegistrationConfirmationPage";
 import EmailConfirmedPage from "./pages/EmailConfirmedPage";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
-
+import UnknownPage from "./pages/UnknownPage";
 
 function App() {
   return (
@@ -31,6 +31,7 @@ function App() {
               <Route path="/registration-confirmation" element={<RegistrationConfirmationPage />} />
               <Route path="/success" element={<EmailConfirmedPage />} />
               <Route path="/posts/:postId" element={<PostPage />} />
+              <Route path="*" element={<UnknownPage />} />
             </Routes>
             <Header>
               <BurgerMenu />
