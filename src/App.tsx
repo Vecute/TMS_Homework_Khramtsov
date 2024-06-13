@@ -17,6 +17,8 @@ import { Provider } from "react-redux";
 import UnknownPage from "./pages/UnknownPage";
 
 function App() {
+  // Был ли рендер какой-нибудь страницы
+  const isPageNotEmpty = document.querySelector('.template')
   return (
     <Provider store={store}>
       <div className="App">
@@ -33,6 +35,7 @@ function App() {
               <Route path="/posts/:postId" element={<PostPage />} />
               <Route path="*" element={<UnknownPage />} />
             </Routes>
+            {isPageNotEmpty ? '' :<UnknownPage />} {/*Переводить на пустую страницу, если роутер не работает корректно*/}
             <Header>
               <BurgerMenu />
               <SearchButton />
