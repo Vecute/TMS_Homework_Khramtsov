@@ -1,7 +1,7 @@
-import "../styles/SignUpForm.scss"; // Импорт стилей для формы регистрации
-import useInput from "../customHooks/useInput"; // Импорт пользовательского хука для управления вводом
-import React, { useEffect, useRef, useState } from "react"; // Импорт React и некоторых хуков
-import { useNavigate, Link } from "react-router-dom"; // Импорт хука для навигации и компонента для ссылок
+import "../styles/SignUpForm.scss";
+import useInput from "../customHooks/useInput";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 // Определение интерфейса для свойств формы регистрации
 interface SignUpFormProps {

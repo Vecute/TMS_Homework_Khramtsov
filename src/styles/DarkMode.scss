@@ -1,5 +1,6 @@
 :root {
   --font-color: #444444;
+  --tab-hover-color: #6495ed;
   --secondary-font-color: #555454;
   --background-color: #eeeeee;
   --background-modal-color: #00000066;
@@ -31,6 +32,8 @@
   --error-color: #ff0000;
   --shadow-color: #00000033;
   --border-color: #eeeeee;
+  --spinner-circle-color: #333333;
+  --spinner-highlighter: #6495ed;
 }
 
 [data-theme="dark"] {
@@ -58,6 +61,7 @@
   --input-background-color: #eeeeee;
   --shadow-color: #8680804d;
   --border-color: #333333;
+  --spinner-circle-color: #eeeeee;
 }
 
 body {

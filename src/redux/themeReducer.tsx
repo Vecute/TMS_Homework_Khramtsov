@@ -38,8 +38,6 @@ const themeReducer = createSlice(
     }
 )
 
-// Экспорт действия toggleTheme для использования вне редюсера
+// Экспорт действия и редюсера
 export const {toggleTheme} = themeReducer.actions
-
-// Экспорт редюсера для использования в хранилище Redux
 export default themeReducer.reducer

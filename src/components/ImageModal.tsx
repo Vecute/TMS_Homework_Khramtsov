@@ -44,7 +44,6 @@ export const ImageModal = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Рендеринг компонента
   return (
     <Fragment>
       {selectedImage && (

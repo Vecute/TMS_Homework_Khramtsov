@@ -1,22 +1,26 @@
 .search {
   &-list {
-    display: grid;
+    display: flex;
     flex-direction: column;
     row-gap: 10px;
+
     & .post {
       &-card {
         display: grid;
         grid-template-columns: auto 1fr;
         grid-template-rows: auto auto auto;
         grid-gap: 10px;
+
         &__bottom-menu {
           grid-column: span 3;
           grid-row: span 1;
           order: 4;
         }
+
         &__likes-menu {
           column-gap: 7px;
         }
+
         &__extra-menu {
           column-gap: 7px;
         }
@@ -28,6 +32,7 @@
           grid-column: span 1;
           grid-row: span 2;
           order: 1;
+
           @media only screen and (max-width: 330px) {
             display: none;
           }
@@ -38,6 +43,7 @@
           grid-row: span 1;
           order: 3;
           color: var(--font-color);
+
           @media only screen and (max-width: 350px) {
             font-size: 20px;
           }
@@ -48,6 +54,7 @@
           grid-column: span 2;
           grid-row: span 1;
           order: 2;
+
           @media only screen and (max-width: 350px) {
             font-size: 12px;
           }
@@ -55,19 +62,22 @@
 
         & .post-card__options {
           display: none;
-      }
+        }
       }
     }
   }
+
   &-empty {
     border: 1px solid var(--border-color);
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0 0 8px 0 var(--shadow-color);
     font-size: 40px;
+
     @media only screen and (max-width: 430px) {
       font-size: 30px;
     }
+
     @media only screen and (max-width: 350px) {
       font-size: 24px;
     }

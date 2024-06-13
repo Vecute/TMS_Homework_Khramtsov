@@ -28,8 +28,6 @@ const postPopUpReducer = createSlice(
     }
 )
 
-// Экспорт действия setSelectedPost для использования вне редюсера
+// Экспорт действия и редюсера
 export const {setSelectedPost} = postPopUpReducer.actions
-
-// Экспорт редюсера для использования в хранилище Redux
 export default postPopUpReducer.reducer

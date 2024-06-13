@@ -1,40 +1,62 @@
 import '../styles/PostList.scss';
-import { useState, useEffect } from 'react';
-import { PostCard, PostProps } from './PostCard';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { PostCard } from './PostCard';
 import { PostModal } from './PostModal';
-
-const sizes = ["small", "medium", "large"] as const; // Определяем константный массив размеров постов
-export type Size = (typeof sizes)[number]; // Определяем тип Size как одно из значений массива sizes
+import { RootState } from '../redux/store';
+import PostsLoader from './PostsLoader';
 
 const PostList = () => {
-  const [posts, setPosts] = useState<Array<PostProps & { size: Size }>>([]); // Используем хук состояния для управления списком постов
+  // Создаем состояние activeTab с помощью useState и устанавливаем начальное значение "all"
+  const [activeTab, setActiveTab] = useState<"all" | "favorites">("all");
 
-  useEffect(() => { // Используем хук эффекта для выполнения действий после рендеринга компонента
-    const fetchPosts = async () => { // Определяем асинхронную функцию для получения постов
-      try {
-        const response = await fetch('https://jsonplaceholder.org/posts'); // Отправляем запрос на сервер для получения постов
-        const data: PostProps[] = await response.json(); // Преобразуем ответ сервера в формат JSON
+  // Получаем все посты из хранилища Redux с помощью useSelector
+  const posts = useSelector((state: RootState) => state.postsReducer.posts);
 
-        const postsWithSize = data.map((post) => ({ // Добавляем каждому посту случайный размер
-          ...post,
-          size: sizes[Math.floor(Math.random() * sizes.length)],
-        }));
+  // Получаем объект favorites из хранилища Redux
+  const favorites = useSelector((state: RootState) => state.favoritesReducer);
 
-        setPosts(postsWithSize); // Обновляем состояние списка постов
-      } catch (error) {
-        console.error('Error:', error); // Выводим ошибку в консоль, если что-то пошло не так
-      }
-    };
+  // Фильтруем посты в зависимости от значения activeTab
+  const filteredPosts = activeTab === "favorites" ? posts.filter((post) => favorites[post.id]) : posts;
 
-    fetchPosts(); // Вызываем функцию для получения постов
-  }, []); // Передаем пустой массив зависимостей, чтобы хук эффекта сработал только один раз после первого рендеринга компонента
+  useEffect(() => {
+    // Прокручиваем страницу в начало (0, 0)
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
-    <div className="post-list">
-      {posts.map((post) => ( // Проходим по каждому посту в списке
-        <PostCard key={post.id} {...post} /> // И отображаем карточку поста
-      ))}
-      <PostModal/>
+    <div>
+      <PostsLoader />
+      <div className='post__tab-line'>
+        <button
+          onClick={() => setActiveTab("all")} // При клике устанавливаем activeTab в "all"
+          className={`post__tab ${activeTab === "all" ? "selected" : ""}`} // Динамически добавляем класс "selected", если activeTab равен "all"
+        >
+          All
+        </button>
+
+        <button
+          onClick={() => setActiveTab("favorites")} // При клике устанавливаем activeTab в "favorites"
+          className={`post__tab ${activeTab === "favorites" ? "selected" : ""}`} // Динамически добавляем класс "selected", если activeTab равен "favorites"
+        >
+          Favorites
+        </button>
+      </div>
+      <div className="post-list">
+        {/* Проверяем, есть ли отфильтрованные посты */}
+        {filteredPosts.length > 0 ? (
+          // Если есть, то для каждого поста рендерим компонент PostCard
+          filteredPosts.map((post) => (
+            <PostCard
+              key={post.id} // Устанавливаем ключ для каждого элемента списка
+              {...post} // Передаем все свойства поста в компонент PostCard как пропсы
+            />
+          ))
+        ) : (
+          <div className="post__empty">There are no posts 😭</div>
+        )}
+        <PostModal />
+      </div>
     </div>
   );
 };

@@ -5,7 +5,6 @@ import { Fragment, useEffect } from 'react';
 import { setSelectedPost } from '../redux/postPopUpReducer';
 import { RootState } from '../redux/store';
 
-// Определение компонента PostModal
 export const PostModal = () => {
     const { selectedPost } = useSelector((state: RootState) => state.postPopUpReducer) // Использование useSelector для получения selectedPost из хранилища Redux
     const dispatch = useDispatch() // Использование useDispatch для создания функции dispatch

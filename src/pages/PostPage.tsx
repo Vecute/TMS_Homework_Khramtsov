@@ -1,77 +1,55 @@
-import "../styles/PostList.scss";
+import "../styles/PostList.scss"; 
 import TemplatePage from "./TemplatePage";
-import { PostProps, PostCard } from "../components/PostCard";
-import { useEffect, useState } from "react";
+import { PostCard } from "../components/PostCard";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSelectedImage } from "../redux/imagePopUpReducer";
 import { ImageModal } from "../components/ImageModal";
+import { RootState } from "../redux/store";
+import { useEffect } from "react";
 
 const PostPage = () => {
-  // Получение ID поста из параметров URL
+  // Получение параметра postId из URL с помощью useParams
   const { postId } = useParams();
 
-  // Инициализация состояния для хранения информации о посте, состояния загрузки и ошибки
-  const [post, setPost] = useState<PostProps | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Инициализация хуков для работы с навигацией и Redux
+  // Инициализация хука useNavigate для получения функции navigate
   const navigate = useNavigate();
+  // Инициализация хука useDispatch для получения функции dispatch
   const dispatch = useDispatch();
+  // Получение всех постов из хранилища Redux с помощью useSelector
+  const posts = useSelector((state: RootState) => state.postsReducer.posts);
 
-  // Хук useEffect для загрузки информации о посте при монтировании компонента
-  useEffect(() => {
-    const fetchPost = async () => {
-      setIsLoading(true);
-      setError(null);
+  // Поиск поста с ID, равным postId, в массиве posts
+  const post = posts.find((p) => p.id === parseInt(postId!, 10));
 
-      try {
-        // Выполнение запроса к API
-        const response = await fetch(
-          `https://jsonplaceholder.org/posts/${postId}`
-        );
-
-        // Если запрос не успешен, генерируется ошибка
-        if (!response.ok) {
-          throw new Error("Error loading the post");
-        }
-
-        // Преобразование ответа в JSON
-        const data = await response.json();
-        // Обновление состояния поста
-        setPost(data);
-      } catch (error) {
-        // Обработка ошибок и обновление состояния ошибки
-        setError("Error loading the post");
-        console.error("Error loading the post:", error);
-      } finally {
-        // Обновление состояния загрузки
-        setIsLoading(false);
-      }
-    };
-
-    // Вызов функции fetchPost
-    fetchPost();
-  }, [postId]);
-
-  // Обработчик клика по изображению в посте, который открывает модальное окно с изображением
+  // Обработчик события клика по изображению
   const handleOpenImagePopUp = () => {
+    // Если у поста есть свойство image...
     if (post?.image) {
+      // ...то диспатчим экшен setSelectedImage с URL изображения
       dispatch(setSelectedImage(post.image));
     }
   };
 
-  // Отображение состояния загрузки, ошибки или сообщения о том, что пост не найден
-  if (isLoading) {
-    return <div>Post is loading...</div>;
+  useEffect(() => {
+    // Прокручиваем страницу в начало (0, 0)
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Условная отрисовка в зависимости от состояния загрузки и найденного поста
+  if (!posts.length) {
+    // Отображаем сообщение о загрузке
+    return (
+      <div className="post__loading">
+        <div className="spinner">
+        </div>
+      </div>
+    );
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
+  // Если пост не найден (post === undefined)...
   if (!post) {
+    // ...то отображаем сообщение об ошибке
     return <div className="post-empty">No posts found 😭</div>;
   }
 
@@ -85,7 +63,7 @@ const PostPage = () => {
           title={post.title}
           image={post.image}
           key={post.id}
-          onImageClick={handleOpenImagePopUp} 
+          onImageClick={handleOpenImagePopUp}
         />
         <button onClick={() => navigate("/posts")} className="buttonBack">
           Return to posts
