@@ -15,10 +15,24 @@ const initialState: PostsState = {
   error: null,
 };
 
+// Функция для получения постов из localStorage
+const getPostsFromLocalStorage = (): PostProps[] => {
+  const storedPosts = localStorage.getItem("posts");
+  return storedPosts ? JSON.parse(storedPosts) : [];
+};
+
+// Функция для сохранения постов в localStorage
+const savePostsToLocalStorage = (posts: PostProps[]) => {
+  localStorage.setItem("posts", JSON.stringify(posts));
+};
+
 // Создаем слайс редюсера для постов
 const postsSlice = createSlice({
   name: "posts",
-  initialState,
+  initialState: {
+    ...initialState,
+    posts: getPostsFromLocalStorage(), // Загружаем посты при инициализации
+  },
   reducers: {
     // Экшен для установки загрузки
     setPostsLoading: (state) => {
@@ -29,6 +43,7 @@ const postsSlice = createSlice({
     setPostsSuccess: (state, action: PayloadAction<PostProps[]>) => {
       state.loading = false;
       state.posts = action.payload;
+      savePostsToLocalStorage(action.payload); // Сохраняем посты в localStorage
     },
     // Экшен для ошибки загрузки постов
     setPostsError: (state, action: PayloadAction<string>) => {

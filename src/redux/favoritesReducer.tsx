@@ -5,24 +5,33 @@ type FavoritesState = {
   [postId: number]: boolean;
 };
 
-// Определяем начальное состояние - пустой объект
-const initialState: FavoritesState = {};
+// Функция для получения избранных постов из localStorage
+const getFavoritesFromLocalStorage = (): FavoritesState => {
+  const storedFavorites = localStorage.getItem("favorites");
+  return storedFavorites ? JSON.parse(storedFavorites) : {};
+};
+
+// Функция для сохранения избранных постов в localStorage
+const saveFavoritesToLocalStorage = (favorites: FavoritesState) => {
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+};
+
+// Определяем начальное состояние, получая данные из localStorage
+const initialState: FavoritesState = getFavoritesFromLocalStorage();
 
 // Создаем слайс редюсера с помощью createSlice
 const favoritesReducer = createSlice({
-  name: "favorites", // Имя слайса
-  initialState, // Начальное состояние
+  name: "favorites",
+  initialState,
   reducers: {
-    // Редюсер для переключения состояния "в избранном"
-    toggleFavorite: (state, action: PayloadAction<number>) => { 
-      // action.payload - это ID поста, переданный в экшен
+    toggleFavorite: (state, action: PayloadAction<number>) => {
       const postId = action.payload;
-      // Изменяем значение state[postId] на противоположное, если пост был в избранном, он будет удален, и наоборот
-      state[postId] = !state[postId]; 
+      state[postId] = !state[postId];
+      // Сохраняем обновленное состояние в localStorage
+      saveFavoritesToLocalStorage(state);
     },
   },
 });
 
-// Экспорт действия и редюсера
 export const { toggleFavorite } = favoritesReducer.actions;
 export default favoritesReducer.reducer;

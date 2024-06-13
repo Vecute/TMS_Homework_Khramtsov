@@ -8,27 +8,33 @@ type LikeStatesState = {
   [postId: number]: LikeState;
 };
 
-// Определение начального состояния, которое является пустым объектом
-const initialState: LikeStatesState = {};
+// Функция для получения состояний лайков из localStorage
+const getLikeStatesFromLocalStorage = (): LikeStatesState => {
+  const storedLikeStates = localStorage.getItem("likeStates");
+  return storedLikeStates ? JSON.parse(storedLikeStates) : {};
+};
+
+// Функция для сохранения состояний лайков в localStorage
+const saveLikeStatesToLocalStorage = (likeStates: LikeStatesState) => {
+  localStorage.setItem("likeStates", JSON.stringify(likeStates));
+};
+
+// Определение начального состояния, получая данные из localStorage
+const initialState: LikeStatesState = getLikeStatesFromLocalStorage();
 
 // Создание редюсера с помощью функции createSlice
 const likeStatesReducer = createSlice({
-  // Имя редюсера
   name: "likeStates",
-  // Начальное состояние
   initialState,
-  // Определение редюсеров
   reducers: {
-    // Редюсер для установки состояния лайка
     setLikeState: (state, action: PayloadAction<{ postId: number; likeState: LikeState }>) => {
-      // Извлечение postId и likeState из payload действия
       const { postId, likeState } = action.payload;
-      // Установка нового состояния лайка для данного postId
       state[postId] = likeState;
+      // Сохранение обновленного состояния в localStorage
+      saveLikeStatesToLocalStorage(state);
     },
   },
 });
 
-// Экспорт действия и редюсера
 export const { setLikeState } = likeStatesReducer.actions;
 export default likeStatesReducer.reducer;

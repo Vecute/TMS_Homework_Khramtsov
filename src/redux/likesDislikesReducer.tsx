@@ -8,8 +8,19 @@ type LikesDislikesState = {
   };
 };
 
-// Определение начального состояния, которое является пустым объектом
-const initialState: LikesDislikesState = {};
+// Функция для получения лайков/дизлайков из localStorage
+const getLikesDislikesFromLocalStorage = (): LikesDislikesState => {
+  const storedLikesDislikes = localStorage.getItem("likesDislikes");
+  return storedLikesDislikes ? JSON.parse(storedLikesDislikes) : {};
+};
+
+// Функция для сохранения лайков/дизлайков в localStorage
+const saveLikesDislikesToLocalStorage = (likesDislikes: LikesDislikesState) => {
+  localStorage.setItem("likesDislikes", JSON.stringify(likesDislikes));
+};
+
+// Определение начального состояния, получая данные из localStorage
+const initialState: LikesDislikesState = getLikesDislikesFromLocalStorage();
 
 // Создание редюсера с помощью функции createSlice
 const likesDislikesReducer = createSlice({
@@ -21,35 +32,34 @@ const likesDislikesReducer = createSlice({
   reducers: {
     // Редюсер для увеличения количества лайков и уменьшения количества дизлайков
     likePost: (state, action: PayloadAction<number>) => {
-      const postId = action.payload; // Извлечение postId из payload действия
-      // Если для данного postId еще нет данных, то инициализируем их
+      const postId = action.payload; 
       if (!state[postId]) {
         state[postId] = { likes: 0, dislikes: 0 };
       }
-      // Увеличиваем количество лайков на 1
       state[postId].likes += 1;
-      // Уменьшаем количество дизлайков на 1, но не меньше 0
       state[postId].dislikes = Math.max(state[postId].dislikes - 1, 0);
+      // Сохранение обновленного состояния в localStorage
+      saveLikesDislikesToLocalStorage(state);
     },
     // Редюсер для увеличения количества дизлайков и уменьшения количества лайков
     dislikePost: (state, action: PayloadAction<number>) => {
-      const postId = action.payload; // Извлечение postId из payload действия
-      // Если для данного postId еще нет данных, то инициализируем их
+      const postId = action.payload; 
       if (!state[postId]) {
         state[postId] = { likes: 0, dislikes: 0 };
       }
-      // Увеличиваем количество дизлайков на 1
       state[postId].dislikes += 1;
-      // Уменьшаем количество лайков на 1, но не меньше 0
       state[postId].likes = Math.max(state[postId].likes - 1, 0);
+      // Сохранение обновленного состояния в localStorage
+      saveLikesDislikesToLocalStorage(state);
     },
     // Редюсер для сброса количества лайков и дизлайков
     resetLikesDislikes: (state, action: PayloadAction<number>) => {
-      const postId = action.payload; // Извлечение postId из payload действия
-      // Если для данного postId есть данные, то сбрасываем их
+      const postId = action.payload; 
       if (state[postId]) {
         state[postId] = { likes: 0, dislikes: 0 };
       }
+      // Сохранение обновленного состояния в localStorage
+      saveLikesDislikesToLocalStorage(state);
     },
   },
 });
