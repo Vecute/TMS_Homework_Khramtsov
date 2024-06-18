@@ -6,16 +6,18 @@ import likesDislikesReducer from "./likesDislikesReducer";
 import likeStatesReducer from "./likeStatesReducer";
 import favoritesReducer from "./favoritesReducer";
 import postsReducer from "./postsReducer";
+import userMailConfirmationReducer from "./userMailConfirmationReducer";
 
 // Создание главного редюсера путем объединения редюсеров с помощью функции combineReducers
 const combineReducer = combineReducers({
-        postPopUpReducer,         // Редюсер для всплывающего окна с постом
-        themeReducer,             // Редюсер для темы
-        imagePopUpReducer,        // Редюсер для всплывающего окна с картинкой
-        likesDislikesReducer,     // Редюсер для количества лайков/дизлайков
-        likeStatesReducer,        // Редюсер для состояния лайков/дизлайков
-        favoritesReducer,         // Редюсер для избранного
-        postsReducer,             // Редюсер для постов
+        postPopUpReducer,            // Редюсер для всплывающего окна с постом
+        themeReducer,                // Редюсер для темы
+        imagePopUpReducer,           // Редюсер для всплывающего окна с картинкой
+        likesDislikesReducer,        // Редюсер для количества лайков/дизлайков
+        likeStatesReducer,           // Редюсер для состояния лайков/дизлайков
+        favoritesReducer,            // Редюсер для избранного
+        postsReducer,                // Редюсер для постов
+        userMailConfirmationReducer, // Редюсер для подтверждения почты
     }
 )
 

@@ -2,6 +2,8 @@ import "../styles/SignUpForm.scss";
 import useInput from "../customHooks/useInput";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserMailConfirmation } from "../redux/userMailConfirmationReducer";
 
 // Определение интерфейса для свойств формы регистрации
 interface SignUpFormProps {
@@ -15,6 +17,7 @@ const SignUpForm = (props: SignUpFormProps) => {
   const password = useInput("");
   const confirmPassword = useInput("");
   const navigate = useNavigate(); // Хук для навигации по маршрутам
+  const dispatch = useDispatch() // Использование useDispatch для создания функции dispatch
 
   // Массив, содержащий все поля ввода
   const inputs = [name, email, password, confirmPassword];
@@ -60,6 +63,7 @@ const SignUpForm = (props: SignUpFormProps) => {
       console.log("Password:", password.value);
       console.log("Confirm Password:", confirmPassword.value);
       navigate("/registration-confirmation");
+      dispatch(setUserMailConfirmation(email.value)) // Отправляем значение почты в redux
     } else if (focusRef.current) {
       focusRef.current.focus(); // Установка фокуса на первое невалидное поле ввода
     }
