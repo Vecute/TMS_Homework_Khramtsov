@@ -1,0 +1,107 @@
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal {
+    animation: modalFadeIn 0.3s ease-out forwards;
+
+    &__wrapper {
+        z-index: 1;
+        margin: auto;
+        position: fixed;
+        top: 55px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px;
+        background-color: var(--background-modal-color);
+    }
+
+    width: fit-content;
+    margin: 55px auto 0;
+
+    @media only screen and (max-height: 600px) {
+        margin: 0 auto;
+    }
+
+    & .post-card {
+        margin: auto;
+    }
+
+    &__button {
+        width: inherit;
+        width: 20px;
+        height: 20px;
+
+        &:before {
+            top: calc(50% - 2px);
+            transform: rotate(45deg);
+            position: absolute;
+            content: '';
+            height: 2px;
+            width: inherit;
+            background: var(--icon-color);
+            left: 0;
+            transition: all .3s ease-in;
+        }
+
+        &:after {
+            bottom: 50%;
+            transform: rotate(-45deg);
+            position: absolute;
+            content: '';
+            height: 2px;
+            width: inherit;
+            background: var(--icon-color);
+            left: 0;
+            transition: all .3s ease-in;
+        }
+
+        &-wrapper {
+            cursor: pointer;
+            position: absolute;
+            top: 4px;
+            right: 4px;
+
+            &:hover .modal__button:before {
+                transform: rotate(225deg);
+                background: var(--icon-hover-color)
+            }
+
+            &:hover .modal__button:after {
+                transform: rotate(-225deg);
+                background: var(--icon-hover-color)
+            }
+        }
+    }
+
+    & .post-card {
+        background-color: var(--background-color);
+        border: 1px solid var(--modal-border-color);
+        width: 100%;
+        max-height: calc(100vh - 120px);
+
+        & .post-card__options {
+            display: none;
+        }
+
+        & img {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+
+            @media only screen and (max-height: 600px) {
+                max-height: 40vh;
+            }
+        }
+    }
+
+}
