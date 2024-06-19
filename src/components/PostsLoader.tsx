@@ -1,56 +1,34 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
-import { setPostsLoading, setPostsSuccess, setPostsError } from "../redux/postsReducer";
-import { PostProps } from './PostCard';
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "../redux/store";
+import { fetchPosts } from "../thunk/fetchPosts";
 
 const PostsLoader: React.FC = () => {
-  const dispatch = useDispatch();
+  // Получаем функцию dispatch из useAppDispatch
+  const dispatch = useAppDispatch();
+  // Получаем значения loading и error из состояния редюсера postsReducer
   const { loading, error } = useSelector((state: RootState) => state.postsReducer);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      dispatch(setPostsLoading());
-      try {
-        const response = await fetch("https://jsonplaceholder.org/posts");
-        const data: PostProps[] = await response.json();
-        const postsWithSize = data.map((post) => {
-          let size: "small" | "medium" | "large";
-          if (post.id % 5 === 0) {
-            size = "large";
-          } else if (post.id % 2 === 0) {
-            size = "medium";
-          } else {
-            size = "small";
-          }
-          return {
-            ...post,
-            size: size,
-          };
-        });
-        dispatch(setPostsSuccess(postsWithSize));
-      } catch (error) {
-        dispatch(setPostsError("Error loading posts"));
-        console.error("Error:", error);
-      }
-    };
-
-    fetchPosts();
+    // Диспатчим thunk-функцию fetchPosts для загрузки постов
+    dispatch(fetchPosts());
   }, [dispatch]);
 
+  // Если идет загрузка (loading === true), отображаем спиннер
   if (loading) {
     return (
       <div className="post__loading">
-        <div className="spinner">
-        </div>
+        <div className="spinner"></div>
       </div>
     );
   }
 
+  // Если произошла ошибка (error !== null), отображаем сообщение об ошибке
   if (error) {
-    return <div className="post__error">Error: {error}</div>;
+    return <div className="post__error">Error loading posts: {error}</div>;
   }
 
+  // В остальных случаях возвращаем null, чтобы не отображать ничего
   return null;
 };
 
