@@ -1,62 +1,46 @@
-import '../styles/PostList.scss';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { PostCard } from './PostCard';
-import { PostModal } from './PostModal';
-import { RootState } from '../redux/store';
-import PostsLoader from './PostsLoader';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store';
+import { fetchPostsStart } from '../store/slices/postSlice';
 
-const PostList = () => {
-  // Создаем состояние activeTab с помощью useState и устанавливаем начальное значение "all"
-  const [activeTab, setActiveTab] = useState<"all" | "favorites">("all");
+const PostList: React.FC = () => {
+  // Получаем функцию dispatch для отправки экшенов в хранилище
+  const dispatch = useDispatch();
+  // Получаем данные из хранилища Redux: посты, флаг загрузки и сообщение об ошибке
+  const { posts, loading, error } = useSelector((state: RootState) => state.posts);
+  // Получаем поисковый запрос из хранилища Redux
+  const searchQuery = useSelector((state: RootState) => state.search.query);
 
-  // Получаем все посты из хранилища Redux с помощью useSelector
-  const posts = useSelector((state: RootState) => state.postsReducer.posts);
-
-  // Получаем объект favorites из хранилища Redux
-  const favorites = useSelector((state: RootState) => state.favoritesReducer);
-
-  // Фильтруем посты в зависимости от значения activeTab
-  const filteredPosts = activeTab === "favorites" ? posts.filter((post) => favorites[post.id]) : posts;
-
+  // Используем useEffect для загрузки постов при монтировании компонента
   useEffect(() => {
-    // Прокручиваем страницу в начало (0, 0)
-    window.scrollTo(0, 0);
-  }, []);
+    // Отправляем экшен fetchPostsStart для начала загрузки постов
+    dispatch(fetchPostsStart());
+  }, [dispatch]); // Зависимость от dispatch, чтобы эффект срабатывал только при изменении dispatch
 
+  // Фильтруем посты по поисковому запросу
+  const filteredPosts = posts.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Отображаем сообщение о загрузке, если данные загружаются
+  if (loading) {
+    return <div className='posts'>Loading posts...</div>;
+  }
+
+  // Отображаем сообщение об ошибке, если произошла ошибка при загрузке
+  if (error) {
+    return <div className='posts'>Error: {error}</div>;
+  }
+
+  // Отображаем список отфильтрованных постов
   return (
-    <div>
-      <PostsLoader />
-      <div className='post__tab-line'>
-        <button
-          onClick={() => setActiveTab("all")} // При клике устанавливаем activeTab в "all"
-          className={`post__tab ${activeTab === "all" ? "selected" : ""}`} // Динамически добавляем класс "selected", если activeTab равен "all"
-        >
-          All
-        </button>
-
-        <button
-          onClick={() => setActiveTab("favorites")} // При клике устанавливаем activeTab в "favorites"
-          className={`post__tab ${activeTab === "favorites" ? "selected" : ""}`} // Динамически добавляем класс "selected", если activeTab равен "favorites"
-        >
-          Favorites
-        </button>
-      </div>
-      <div className="post-list">
-        {/* Проверяем, есть ли отфильтрованные посты */}
-        {filteredPosts.length > 0 ? (
-          // Если есть, то для каждого поста рендерим компонент PostCard
-          filteredPosts.map((post) => (
-            <PostCard
-              key={post.id} // Устанавливаем ключ для каждого элемента списка
-              {...post} // Передаем все свойства поста в компонент PostCard как пропсы
-            />
-          ))
-        ) : (
-          <div className="post__empty">There are no posts 😭</div>
-        )}
-        <PostModal />
-      </div>
+    <div className='posts'>
+      <h2>Posts</h2>
+      <ul>
+        {filteredPosts.map((post) => (
+          <li key={post.id} className='item'>{post.id}. {post.title}</li>
+        ))}
+      </ul>
     </div>
   );
 };
