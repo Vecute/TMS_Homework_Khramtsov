@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { fetchUsersStart } from '../store/slices/userSlice';
+import { List, ListItemButton, Paper } from '@mui/material';
 
 const UserList: React.FC = () => {
   // Получаем функцию dispatch для отправки экшенов в хранилище
@@ -24,24 +25,24 @@ const UserList: React.FC = () => {
 
   // Отображаем сообщение о загрузке, если данные загружаются
   if (loading) {
-    return <div className='users'>Loading users...</div>;
+    return <Paper elevation={4} className='users'>Loading users...</Paper>;
   }
 
   // Отображаем сообщение об ошибке, если произошла ошибка при загрузке
   if (error) {
-    return <div className='users'>Error: {error}</div>;
+    return <Paper elevation={4} className='users'>Error: {error}</Paper>;
   }
 
   // Отображаем список отфильтрованных пользователей
   return (
-    <div className='users'>
+    <Paper elevation={4} className='users'>
       <h2>Users</h2>
-      <ul>
+      <List disablePadding>
         {filteredUsers.map((user) => (
-          <li key={user.id} className='item'>{user.id}. {user.name}</li>
+          <ListItemButton key={user.id} sx={{fontSize: '16px'}} dense divider>{user.id}. {user.name}</ListItemButton>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Paper>
   );
 };
 

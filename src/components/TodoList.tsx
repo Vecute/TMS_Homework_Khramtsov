@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { fetchTodosStart } from '../store/slices/todoSlice';
+import { List, ListItemButton, Paper } from '@mui/material';
 
 const TodoList: React.FC = () => {
   // Получаем функцию dispatch для отправки экшенов в хранилище
@@ -19,12 +20,12 @@ const TodoList: React.FC = () => {
 
   // Отображаем сообщение о загрузке, если данные загружаются
   if (loading) {
-    return <div className='todo'>Loading tasks...</div>;
+    return <Paper elevation={4} className='todo'>Loading tasks...</Paper>;
   }
 
   // Отображаем сообщение об ошибке, если произошла ошибка при загрузке
   if (error) {
-    return <div className='todo'>Error: {error}</div>;
+    return <Paper elevation={4} className='todo'>Error: {error}</Paper>;
   }
 
   // Фильтруем задачи по поисковому запросу
@@ -34,14 +35,14 @@ const TodoList: React.FC = () => {
 
   // Отображаем список отфильтрованных задач
   return (
-    <div className='todo'>
+    <Paper elevation={4} className='todo'>
       <h2>ToDo</h2>
-      <ul>
+      <List disablePadding>
         {filteredTodos.map((todo) => (
-          <li key={todo.id} className='item'>{todo.id}. {todo.title}</li>
+          <ListItemButton key={todo.id} sx={{ fontSize: '16px'}} dense divider>{todo.id}. {todo.title}</ListItemButton>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Paper>
   );
 };
 

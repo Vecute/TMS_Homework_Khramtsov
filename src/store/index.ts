@@ -3,6 +3,7 @@ import createSagaMiddleware from 'redux-saga';
 import todoReducer from './slices/todoSlice'; 
 import userReducer from './slices/userSlice'; 
 import postReducer from './slices/postSlice';
+import themeReducer from './slices/themeSlice';
 import searchReducer from './slices/searchSlice'; 
 import { watchFetchTodos } from './sagas/todoSaga';
 import { watchFetchUsers } from './sagas/userSaga';
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   users: userReducer, // Состояние пользователей
   posts: postReducer, // Состояние постов
   search: searchReducer, // Состояние поиска
+  theme: themeReducer, // Состояние темы
 });
 
 // Создаем хранилище Redux, передавая корневой редьюсер и middleware

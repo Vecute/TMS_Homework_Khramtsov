@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setSearchQuery } from '../store/slices/searchSlice';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setSearchQuery } from "../store/slices/searchSlice";
+import { TextField } from "@mui/material";
 
 const Search: React.FC = () => {
   // Получаем функцию dispatch для отправки экшенов
   const dispatch = useDispatch();
   // Создаем локальное состояние для хранения поискового запроса
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
 
   // Обработчик события изменения значения input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,15 +17,15 @@ const Search: React.FC = () => {
     dispatch(setSearchQuery(e.target.value));
   };
 
-  // Отрисовываем input для ввода поискового запроса
   return (
-    <input
-      type="text" // Тип input - текст
-      placeholder="Search..." // Подсказка в input
-      value={query} // Привязываем значение input к локальному состоянию
-      onChange={handleChange} // Назначаем обработчик события изменения значения input
-      className='search' // Добавляем CSS-класс к input
-    />
+      <TextField
+        // variant="standard"
+        type="text" // Тип input - текст
+        value={query} // Привязываем значение input к локальному состоянию
+        onChange={handleChange} // Назначаем обработчик события изменения значения input
+        label="Search"
+        size="small"
+      />
   );
 };
 

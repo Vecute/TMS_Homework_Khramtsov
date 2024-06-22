@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { fetchPostsStart } from '../store/slices/postSlice';
+import { List, ListItemButton, Paper } from '@mui/material';
 
 const PostList: React.FC = () => {
   // Получаем функцию dispatch для отправки экшенов в хранилище
@@ -24,24 +25,24 @@ const PostList: React.FC = () => {
 
   // Отображаем сообщение о загрузке, если данные загружаются
   if (loading) {
-    return <div className='posts'>Loading posts...</div>;
+    return <Paper elevation={4} className='posts'>Loading posts...</Paper>;
   }
 
   // Отображаем сообщение об ошибке, если произошла ошибка при загрузке
   if (error) {
-    return <div className='posts'>Error: {error}</div>;
+    return <Paper elevation={4} className='posts'>Error: {error}</Paper>;
   }
 
   // Отображаем список отфильтрованных постов
   return (
-    <div className='posts'>
+    <Paper elevation={4} className='posts'>
       <h2>Posts</h2>
-      <ul>
+      <List disablePadding>
         {filteredPosts.map((post) => (
-          <li key={post.id} className='item'>{post.id}. {post.title}</li>
+          <ListItemButton key={post.id} sx={{fontSize: '16px'}} dense divider>{post.id}. {post.title}</ListItemButton>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Paper>
   );
 };
 
