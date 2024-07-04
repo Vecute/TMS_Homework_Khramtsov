@@ -7,8 +7,10 @@ const getAccessToken = () => localStorage.getItem(TOKEN_KEY);
 const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY);
 
 // Функции для установки access_token и refresh_token в localStorage
-const setAccessToken = (token: string) => localStorage.setItem(TOKEN_KEY, token);
-const setRefreshToken = (token: string) => localStorage.setItem(REFRESH_TOKEN_KEY, token);
+const setAccessToken = (token: string) =>
+  localStorage.setItem(TOKEN_KEY, token);
+const setRefreshToken = (token: string) =>
+  localStorage.setItem(REFRESH_TOKEN_KEY, token);
 
 // Функция для удаления обоих токенов из localStorage
 const clearTokens = () => {
@@ -25,13 +27,16 @@ const refreshToken = async () => {
 
   try {
     // Отправляем запрос на сервер для обновления access_token
-    const response = await fetch("https://studapi.teachmeskills.by/auth/jwt/refresh/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refresh: refreshToken }),
-    });
+    const response = await fetch(
+      "https://studapi.teachmeskills.by/auth/jwt/refresh/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refresh: refreshToken }),
+      }
+    );
 
     // Если запрос не успешен, выбрасываем ошибку
     if (!response.ok) {
@@ -70,36 +75,47 @@ const useHttp = () => {
       ...options,
       headers,
     };
+    try {
+      // Выполняем запрос
+      const response = await fetch(url, newOptions);
 
-    // Выполняем запрос
-    const response = await fetch(url, newOptions);
-
-    // Если запрос не успешен
-    if (!response.ok) {
-      // Если статус ответа 401 (Unauthorized)
-      if (response.status === 401) {
-        // Обновляем access_token
-        const newAccessToken = await refreshToken();
-        // Если обновление успешно
-        if (newAccessToken) {
-          // Повторяем запрос с новым access_token
-          return await fetch(url, newOptions); 
+      // Если запрос не успешен
+      if (!response.ok) {
+        // Если статус ответа 401 (Unauthorized)
+        if (response.status === 401) {
+          // Обновляем access_token
+          const newAccessToken = await refreshToken();
+          // Если обновление успешно
+          if (newAccessToken) {
+             // Устанавливаем новый access_token
+            setAccessToken(newAccessToken);
+            // Повторяем запрос с новым access_token
+            return await fetch(url, {
+              ...newOptions,
+              headers: {
+                ...newOptions.headers,
+                Authorization: `Bearer ${newAccessToken}`, // Обновляем заголовок Authorization
+              },
+            });
+          } else {
+            // Если обновление не удалось, выбрасываем ошибку
+            throw new Error("Failed to refresh token");
+          }
         } else {
-          // Если обновление не удалось, выбрасываем ошибку
-          throw new Error('Failed to refresh token');
+          // Если статус ответа не 401, выбрасываем ошибку
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      } else {
-        // Если статус ответа не 401, выбрасываем ошибку
-        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    }
 
-    // Возвращаем ответ
-    return response;
+      return response; // Возвращаем ответ
+
+    } catch (error) {
+      console.error("Error fetching data:", error); // Логируем ошибку
+      throw error; // Перебрасываем ошибку дальше
+    }
   };
 
-  // Возвращаем функцию makeRequest
-  return makeRequest;
+  return makeRequest; // Возвращаем функцию makeRequest
 };
 
 export { getAccessToken, setRefreshToken, setAccessToken, clearTokens, useHttp };

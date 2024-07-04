@@ -26,11 +26,9 @@ const AccountButton = () => {
           }
         ); // Выполняем запрос на получение данных пользователя
         const data = await response.json();
-        while (data.code === "token_not_valid") return; // Если токен недействителен, выходим из функции
         setUserData({ name: data.username, email: data.email }); // Устанавливаем данные пользователя в состояние
       } catch (error) {
-        // Логируем ошибку
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching user data:", error); // Логируем ошибку
       }
     } else {
       navigate("/sign-in"); // Если токен отсутствует, перенаправляем на страницу входа
