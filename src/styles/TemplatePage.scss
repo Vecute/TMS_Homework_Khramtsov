@@ -1,0 +1,16 @@
+.template {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    justify-content: center;
+    margin-top: 55px;
+    &__title {
+        font-size: 34px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    &__container {
+        display: flex;
+        justify-content: center;
+    }
+}
