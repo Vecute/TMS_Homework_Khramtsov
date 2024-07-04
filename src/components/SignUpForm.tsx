@@ -17,7 +17,7 @@ const SignUpForm = (props: SignUpFormProps) => {
   const password = useInput("");
   const confirmPassword = useInput("");
   const navigate = useNavigate(); // Хук для навигации по маршрутам
-  const dispatch = useDispatch() // Использование useDispatch для создания функции dispatch
+  const dispatch = useDispatch(); // Использование useDispatch для создания функции dispatch
 
   // Массив, содержащий все поля ввода
   const inputs = [name, email, password, confirmPassword];
@@ -33,11 +33,11 @@ const SignUpForm = (props: SignUpFormProps) => {
       name.ref.current.focus();
       setIsInitialRender(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Обработчик отправки формы
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Предотвращение стандартного поведения формы
 
     let isValid = true; // Переменная для проверки валидности формы
@@ -56,14 +56,48 @@ const SignUpForm = (props: SignUpFormProps) => {
       }
     }
 
+    // Проверка совпадения паролей
+    if (password.value !== confirmPassword.value) {
+      confirmPassword.setIsValid(false);
+      isValid = false;
+      if (!focusRef.current) {
+        focusRef.current = confirmPassword.ref.current;
+      }
+      // Очистка поля подтверждения пароля
+    } else {
+      confirmPassword.setIsValid(true);
+    }
+
     // Если форма валидна, выводим значения полей ввода и переходим на страницу подтверждения регистрации
     if (isValid) {
-      console.log("Name:", name.value);
-      console.log("Email:", email.value);
-      console.log("Password:", password.value);
-      console.log("Confirm Password:", confirmPassword.value);
-      navigate("/registration-confirmation");
-      dispatch(setUserMailConfirmation(email.value)) // Отправляем значение почты в redux
+      try {
+        const response = await fetch(
+          "https://studapi.teachmeskills.by/auth/users/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: name.value,
+              email: email.value,
+              password: password.value,
+              name: name.value,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Registration successful!:", data);
+        navigate("/registration-validation");
+        dispatch(setUserMailConfirmation(email.value)); // Отправляем значение почты в redux
+      } catch (error) {
+        console.error("Registration error:", error);
+      }
     } else if (focusRef.current) {
       focusRef.current.focus(); // Установка фокуса на первое невалидное поле ввода
     }
@@ -83,7 +117,7 @@ const SignUpForm = (props: SignUpFormProps) => {
             value={name.value}
             onChange={name.onChange}
             placeholder="Your name"
-            className={`signUpForm__input ${!name.isValid ? 'invalid' : ''}`}
+            className={`signUpForm__input ${!name.isValid ? "invalid" : ""}`}
           />
         </div>
         <div className="signUpForm__input-container">
@@ -97,7 +131,7 @@ const SignUpForm = (props: SignUpFormProps) => {
             value={email.value}
             onChange={email.onChange}
             placeholder="Your email"
-            className={`signUpForm__input ${!email.isValid ? 'invalid' : ''}`}
+            className={`signUpForm__input ${!email.isValid ? "invalid" : ""}`}
           />
         </div>
         <div className="signUpForm__input-container">
@@ -111,7 +145,9 @@ const SignUpForm = (props: SignUpFormProps) => {
             value={password.value}
             onChange={password.onChange}
             placeholder="Your password"
-            className={`signUpForm__input ${!password.isValid ? 'invalid' : ''}`}
+            className={`signUpForm__input ${
+              !password.isValid ? "invalid" : ""
+            }`}
           />
         </div>
         <div className="signUpForm__input-container">
@@ -125,15 +161,24 @@ const SignUpForm = (props: SignUpFormProps) => {
             value={confirmPassword.value}
             onChange={confirmPassword.onChange}
             placeholder="Confirm password"
-            className={`signUpForm__input ${!confirmPassword.isValid ? 'invalid' : ''}`}
+            className={`signUpForm__input ${
+              !confirmPassword.isValid ? "invalid" : ""
+            }`}
           />
         </div>
-        <button type="submit" className="signUpForm__button">Sign Up</button>
+        <button type="submit" className="signUpForm__button">
+          Sign Up
+        </button>
         <p className="signUpForm__signIn">
-          Already have an account? <Link to="/sign-in" className='links'>Sign In</Link>
+          Already have an account?{" "}
+          <Link to="/sign-in" className="links">
+            Sign In
+          </Link>
         </p>
       </form>
-      <button onClick={() => navigate("/posts")} className='buttonBack'>Return to posts</button>
+      <button onClick={() => navigate("/posts")} className="buttonBack">
+        Return to posts
+      </button>
     </div>
   );
 };

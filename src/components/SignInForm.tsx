@@ -5,7 +5,10 @@ import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { setUserMailConfirmation } from "../redux/userMailConfirmationReducer";
+import { setAccessToken, setRefreshToken } from "../services/authToken";
+import { useHttp } from "../services/authToken";
 
+// Интерфейс для пропсов компонента
 interface SignInFormProps {
   onSubmit: (value: string) => void;
 }
@@ -18,9 +21,10 @@ const SignInForm = (props: SignInFormProps) => {
   const password = useInput(""); // Используем кастомный хук для управления значением поля ввода password
   const navigate = useNavigate(); // Используем хук для навигации по страницам
   const inputs = [email, password]; // Создаем массив из полей ввода
-  const dispatch = useDispatch() // Использование useDispatch для создания функции dispatch
+  const dispatch = useDispatch(); // Использование useDispatch для создания функции dispatch
+  const http = useHttp(); // Получаем хук для выполнения HTTP-запросов
 
-  const focusRef = useRef<HTMLInputElement | null>(null);
+  const focusRef = useRef<HTMLInputElement | null>(null); // Создаем ref для хранения ссылки на элемент, который нужно сфокусировать
 
   // Создаем состояние для отслеживания первичной загрузки
   const [isInitialRender, setIsInitialRender] = useState(true);
@@ -38,7 +42,7 @@ const SignInForm = (props: SignInFormProps) => {
   }, []); // Выполняем useEffect только один раз при монтировании
 
   // Обработчик отправки формы
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Отменяем стандартное поведение формы при отправке, чтобы страница не перезагружалась
 
     let isValid = true; // Переменная для отслеживания валидности всех полей формы
@@ -61,14 +65,31 @@ const SignInForm = (props: SignInFormProps) => {
     }
 
     if (isValid) {
-      // Если все поля формы валидны...
-      console.log("Email:", email.value); // ...то выводим в консоль значение поля ввода email...
-      console.log("Password:", password.value); // ...и значение поля ввода password...
-      dispatch(setUserMailConfirmation(null)) // Отправляем значение почты в redux
-      navigate("/posts"); // ...и переходим на страницу с постами
+      try { // Выполняем запрос на сервер для аутентификации
+        const response = await http(
+          "https://studapi.teachmeskills.by/auth/jwt/create/",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: email.value,
+              password: password.value,
+            }),
+          }
+        );
+
+        const data = await response.json(); // Получаем данные ответа
+        setAccessToken(data.access); // Устанавливаем access_token
+        setRefreshToken(data.refresh); // Устанавливаем refresh_token
+        dispatch(setUserMailConfirmation(null)); // Сбрасываем email из состояния Redux
+        navigate("/posts"); // Перенаправляем на страницу постов
+      } catch (error) {
+        alert("Authentication failed: check your credentials"); // Выводим сообщение об ошибке
+      }
     } else if (focusRef.current) {
-      // Если есть ссылка на элемент для фокуса...
-      focusRef.current.focus(); // ...то устанавливаем на него фокус
+      focusRef.current.focus(); // Фокусируем первое невалидное поле
     }
   };
 
