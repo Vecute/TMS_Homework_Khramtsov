@@ -11,8 +11,8 @@ import { toggleFavorite } from "../redux/favoritesReducer";
 export type PostType = {
   id: number;
   image?: string;
-  content: string;
-  publishedAt: string;
+  description: string;
+  date: string;
   title: string;
 };
 
@@ -24,7 +24,7 @@ export interface PostProps extends PostType {
   onFavoriteClick?: (id: number) => void;
 };
 
-export const PostCard = ({ id, image, content, publishedAt, title, size, onImageClick, onFavoriteClick }: PostProps) => {
+export const PostCard = ({ id, image, description, date, title, size, onImageClick, onFavoriteClick }: PostProps) => {
   const navigate = useNavigate(); // Инициализация хука useNavigate
   const dispatch = useDispatch(); // Инициализация хука useDispatch
 
@@ -71,7 +71,7 @@ export const PostCard = ({ id, image, content, publishedAt, title, size, onImage
   // Обработчик клика по кнопке "Открыть попап"
   const handleOpenPopUp = (event: React.MouseEvent) => {
     event.stopPropagation(); // Остановка всплытия события
-    dispatch(setSelectedPost({ id, image, content, publishedAt, title })); // Диспатчим экшен открытия попапа с данными поста
+    dispatch(setSelectedPost({ id, image, description, date, title })); // Диспатчим экшен открытия попапа с данными поста
   };
 
   // Обработчик клика по кнопке "В избранное"
@@ -84,11 +84,11 @@ export const PostCard = ({ id, image, content, publishedAt, title, size, onImage
   return (
     <div className={`post-card ${size}`} id={id.toString()} onClick={handleClick}>
       {image && (
-        <img src={image} alt={title} onClick={onImageClick} className="post__image" />
+        <img src={image} alt={title} onClick={onImageClick} className="post__image" onError={(e) => {(e.target as HTMLImageElement).src = "/fallback.png";}}/>
       )}
       <h2>{title}</h2>
-      <p className="post-card__description">{content}</p>
-      <p className="post-card__date">{publishedAt}</p>
+      <p className="post-card__description">{description}</p>
+      <p className="post-card__date">{date}</p>
       <div className="post-card__bottom-menu">
         <div className="post-card__likes-menu">
           <div

@@ -39,6 +39,23 @@
   --border-color: #eeeeee;
   --spinner-circle-color: #333333;
   --spinner-highlighter: #6495ed;
+  --add-post-input-background: #ffffff;
+  --add-post-input-font-color: #444444;
+  --add-post-input-reset-color: #ff0000;
+  --add-post-input-reset-hover-color: #444444;
+  --delete-button-color: #d43e3e;
+  --delete-button-font-color: #eeeeee;
+  --delete-button-border-color: #333333;
+  --cancel-button-font-color: #6495ed;
+  --cancel-button-border-color: #6495ed;
+  --cancel-button-background-color: #eeeeee;
+  --cancel-button-hover-background-color: #eeeeee;
+  --cancel-button-hover-font-color: #333333;
+  --alert-background-color: #6495ed;
+  --alert-font-color: #eeeeee;
+  --alert-border-color: #333333;
+  --alert-icon-hover-color: #333333;
+  --alert-icon-color: #eeeeee;
 }
 
 [data-theme="dark"] {
@@ -46,7 +63,7 @@
   --secondary-font-color: #eeeeeebe;
   --background-color: #333333;
   --modal-border-color: #eeeeee;
-    --account-modal-font-color: #6495ed;
+  --account-modal-font-color: #6495ed;
   --link-color: #6495ed;
   --link-hover-color: #eeeeee;
   --icon-color: #eeeeee;
@@ -68,6 +85,12 @@
   --shadow-color: #8680804d;
   --border-color: #333333;
   --spinner-circle-color: #eeeeee;
+  --delete-button-border-color: #eeeeee;
+  --cancel-button-font-color: #eeeeee;
+  --cancel-button-border-color: #eeeeee;
+  --cancel-button-background-color: #333333;
+  --cancel-button-hover-background-color: #000000;
+  --cancel-button-hover-font-color: #eeeeee;
 }
 
 body {
@@ -89,6 +112,7 @@ body {
   align-items: center;
   justify-content: space-around;
   padding: 10px;
+  margin-top: auto;
 }
 
 .theme-button {

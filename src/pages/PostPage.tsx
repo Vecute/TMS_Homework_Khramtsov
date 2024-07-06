@@ -57,9 +57,9 @@ const PostPage = () => {
     <TemplatePage title={post.title}>
       <div className="post-single">
         <PostCard
-          content={post.content}
+          description={post.description}
           id={post.id}
-          publishedAt={post.publishedAt}
+          date={post.date}
           title={post.title}
           image={post.image}
           key={post.id}

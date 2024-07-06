@@ -132,6 +132,7 @@ const SignUpForm = (props: SignUpFormProps) => {
             onChange={email.onChange}
             placeholder="Your email"
             className={`signUpForm__input ${!email.isValid ? "invalid" : ""}`}
+            autoComplete="username"
           />
         </div>
         <div className="signUpForm__input-container">
@@ -148,6 +149,7 @@ const SignUpForm = (props: SignUpFormProps) => {
             className={`signUpForm__input ${
               !password.isValid ? "invalid" : ""
             }`}
+            autoComplete="new-password"
           />
         </div>
         <div className="signUpForm__input-container">
@@ -164,6 +166,7 @@ const SignUpForm = (props: SignUpFormProps) => {
             className={`signUpForm__input ${
               !confirmPassword.isValid ? "invalid" : ""
             }`}
+            autoComplete="new-password"
           />
         </div>
         <button type="submit" className="signUpForm__button">

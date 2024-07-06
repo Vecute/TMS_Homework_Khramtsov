@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import Alert from "./Alert";
 
 // Определение интерфейса для свойств формы регистрации
 interface RegistrationValidationFormProps {
@@ -11,17 +12,27 @@ interface RegistrationValidationFormProps {
 }
 
 const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
-  // Использование пользовательского хука для управления вводом для каждого поля ввода
+  // Получаем email из Redux-состояния
+  const userEmail = useSelector(
+    (state: RootState) => state.userMailConfirmationReducer.userEmail
+  );
+
+  // Используем кастомный хук useInput для управления полями ввода
   const uid = useInput("");
   const token = useInput("");
-  const navigate = useNavigate(); // Хук для навигации по маршрутам
-  const userEmail = useSelector((state: RootState) => state.userMailConfirmationReducer.userEmail)
 
-  // Массив, содержащий все поля ввода
+  // Массив с полями ввода
   const inputs = [uid, token];
+
+  // Хук для навигации по маршрутам
+  const navigate = useNavigate(); 
+
+  // Состояния для отображения алерта и отслеживания первичной загрузки
+  const [showAlert, setShowAlert] = useState(false);
 
   // Создание ссылки для фокусировки на элементе ввода
   const focusRef = useRef<HTMLInputElement | null>(null);
+
   // Состояние для отслеживания первого рендеринга
   const [isInitialRender, setIsInitialRender] = useState(true);
 
@@ -74,26 +85,32 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
         if (response.status === 204) {
           console.log("Validation successful!");
           navigate("/success");
-          return
+          return;
         } else if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
       } catch (error) {
         console.error("Validation error:", error);
-        alert('Check the entered data')
+        setShowAlert(true);
       }
     } else if (focusRef.current) {
       focusRef.current.focus(); // Установка фокуса на первое невалидное поле ввода
     }
   };
 
+  const handleCloseAlert = () => { // Функция для закрытия алерта
+    setShowAlert(false);
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit} className="registrationValidationForm">
-      <p className="registration__text">
-        We have sent an email to <span className="registration__email">{userEmail}</span> to confirm
-        registration. Check your incoming messages and use the values from the sent link to fill out the verification form.
-      </p>
+        <p className="registration__text">
+          We have sent an email to{" "}
+          <span className="registration__email">{userEmail}</span> to confirm
+          registration. Check your incoming messages and use the values from the
+          sent link to fill out the verification form.
+        </p>
         <div className="registrationValidationForm__input-container">
           <label htmlFor="uid" className="registrationValidationForm__label">
             uid
@@ -105,7 +122,9 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
             value={uid.value}
             onChange={uid.onChange}
             placeholder="value between the last and penultimate slash"
-            className={`registrationValidationForm__input ${!uid.isValid ? "invalid" : ""}`}
+            className={`registrationValidationForm__input ${
+              !uid.isValid ? "invalid" : ""
+            }`}
           />
         </div>
         <div className="registrationValidationForm__input-container">
@@ -119,19 +138,24 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
             value={token.value}
             onChange={token.onChange}
             placeholder="value after the last slash"
-            className={`registrationValidationForm__input ${!token.isValid ? "invalid" : ""}`}
+            className={`registrationValidationForm__input ${
+              !token.isValid ? "invalid" : ""
+            }`}
           />
         </div>
-        <button
-          type="submit"
-          className="registration__button"
-        >
+        <button type="submit" className="registration__button">
           I entered the data to confirm the registration
         </button>
       </form>
       <button onClick={() => navigate("/posts")} className="buttonBack">
         Return to posts
       </button>
+      {showAlert && (
+        <Alert
+          text="Please check the entered data"
+          onClose={handleCloseAlert}
+        />
+      )}
     </div>
   );
 };

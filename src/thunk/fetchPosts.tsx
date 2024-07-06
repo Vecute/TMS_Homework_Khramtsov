@@ -13,11 +13,13 @@ export const fetchPosts = createAsyncThunk(
   "posts/fetchPosts", // Указываем тип действия для thunk
   async (_, { rejectWithValue }) => { // Асинхронная функция thunk
     try {
-      const response = await fetch("https://jsonplaceholder.org/posts"); // Отправляем GET-запрос на API для получения постов
-      const data: PostProps[] = await response.json(); // Парсим ответ от API в JSON-формат и приводим его к типу PostProps[]
+      // const response = await fetch("https://jsonplaceholder.org/posts"); // Отправляем GET-запрос на API для получения постов
+      const response = await fetch("https://studapi.teachmeskills.by/blog/posts/?limit=100"); // Отправляем GET-запрос на API для получения постов
+      const data = await response.json(); // Парсим ответ от API в JSON-формат
+      const results: PostProps[] = data['results']; // Забираем посты и приводим их к типу PostProps[]
 
       // Создаем новый массив postsWithSize, добавляя свойство size к каждому посту
-      const postsWithSize = data.map((post) => ({
+      const postsWithSize = results.map((post) => ({
         ...post, // Копируем все свойства поста
         size: // Добавляем свойство size
           post.id % 5 === 0 // Если id поста делится на 5 без остатка

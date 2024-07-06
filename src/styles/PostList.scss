@@ -72,6 +72,7 @@
     grid-template-columns: repeat(8, 1fr);
     grid-gap: 10px;
     grid-auto-flow: dense;
+    max-width: 100%;
 
     @media only screen and (max-width: 1540px) {
       grid-template-columns: repeat(7, 1fr);
@@ -159,8 +160,14 @@
     }
 
     & img {
+      // max-height: 200px;
+      // height: 100%;
+      // width: 100%;
+      // object-fit: cover;
       width: 100%;
       height: auto;
+      object-fit: contain;
+      max-height: 250px;
       margin-bottom: 5px;
       border-radius: 5px;
     }
@@ -168,6 +175,7 @@
     & h2 {
       font-size: 22px;
       margin-bottom: 5px;
+      word-break: break-all;
     }
 
     & p {
@@ -186,7 +194,6 @@
 .medium {
   grid-column: span 2;
   grid-row: span 1;
-
   @media only screen and (max-width: 440px) {
     grid-column: span 1;
     grid-row: span 1;
@@ -243,6 +250,8 @@
         align-self: center;
         margin-bottom: 10px;
         cursor: pointer;
+        max-height: 100%;
+        object-fit:fill;
       }
 
       & .post-card__description {

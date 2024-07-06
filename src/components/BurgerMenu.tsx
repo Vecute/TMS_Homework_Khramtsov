@@ -2,6 +2,7 @@ import "../styles/BurgerMenu.scss";
 import DarkModeToggle from "./DarkModeToggle";
 import { Fragment, useState, useRef, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import useTokenChecker from "../customHooks/useTokenChecker";
 
 const BurgerMenu= () => {
   // Использование хука useState для управления состоянием открытия/закрытия меню
@@ -11,15 +12,22 @@ const BurgerMenu= () => {
   const buttonRef = useRef<HTMLDivElement>(null);
   // Использование хука useNavigate для перехода на другие страницы
   const navigate = useNavigate();
+  const isValid = useTokenChecker();
 
   // Функция для переключения состояния меню
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  // Функция для обработки клика по элементу меню
-  const handleItemClick = () => {
+  // Функция для обработки клика по кнопке "Home"
+  const handleHomeClick = () => {
     navigate("/posts") // Переход на страницу постов
+    setIsOpen(false); // Закрытие меню
+  };
+
+  // Функция для обработки клика по кнопке "Add post"
+  const handleAddPostClick = () => {
+    navigate("/add-post") // Переход на страницу постов
     setIsOpen(false); // Закрытие меню
   };
 
@@ -57,8 +65,8 @@ const BurgerMenu= () => {
         <div className={`header__toggle-item ${isOpen ? 'open' : ''}`}></div>
       </div>
       <ul ref={menuRef} className={`header__toggle-list ${isOpen ? 'open' : ''}`}>
-        <li onClick={() => handleItemClick()} className='header__toggle-list-item'>Home</li>
-        <li onClick={() => handleItemClick()} className='header__toggle-list-item'>Add post</li>
+        <li onClick={() => handleHomeClick()} className='header__toggle-list-item'>Home</li>
+        {isValid && <li onClick={() => handleAddPostClick()} className='header__toggle-list-item'>Add post</li>}
         <li className='header__toggle-list-item-empty'></li>
         <DarkModeToggle />
       </ul>

@@ -7,6 +7,7 @@ import { RootState } from "../redux/store";
 import { setUserMailConfirmation } from "../redux/userMailConfirmationReducer";
 import { setAccessToken, setRefreshToken } from "../services/authToken";
 import { useHttp } from "../services/authToken";
+import Alert from "./Alert";
 
 // Интерфейс для пропсов компонента
 interface SignInFormProps {
@@ -14,20 +15,31 @@ interface SignInFormProps {
 }
 
 const SignInForm = (props: SignInFormProps) => {
+  // Получаем email из Redux-состояния
   const userEmail = useSelector(
     (state: RootState) => state.userMailConfirmationReducer.userEmail
-  ); // Использование хука useSelector для получения пользовательского email из состояния Redux
-  const email = useInput(userEmail ?? ""); // Используем кастомный хук для управления значением поля ввода email
-  const password = useInput(""); // Используем кастомный хук для управления значением поля ввода password
-  const navigate = useNavigate(); // Используем хук для навигации по страницам
+  );
+
+  // Используем кастомный хук useInput для управления полями ввода email и password
+  const email = useInput(userEmail ?? "");
+  const password = useInput("");
+
+  // Создаем массив из полей ввода
   const inputs = [email, password]; // Создаем массив из полей ввода
-  const dispatch = useDispatch(); // Использование useDispatch для создания функции dispatch
+
+  // Хуки для навигации и dispatch
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Получаем хук для выполнения HTTP-запросов
   const http = useHttp(); // Получаем хук для выполнения HTTP-запросов
 
-  const focusRef = useRef<HTMLInputElement | null>(null); // Создаем ref для хранения ссылки на элемент, который нужно сфокусировать
-
-  // Создаем состояние для отслеживания первичной загрузки
+  // Состояния для отображения алерта и отслеживания первичной загрузки
+  const [showAlert, setShowAlert] = useState(false);
   const [isInitialRender, setIsInitialRender] = useState(true);
+
+  // Создаем ref для хранения ссылки на элемент, который нужно сфокусировать
+  const focusRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     // При монтировании компонента устанавливаем фокус на первый инпут либо на второй, если есть почта
@@ -65,7 +77,8 @@ const SignInForm = (props: SignInFormProps) => {
     }
 
     if (isValid) {
-      try { // Выполняем запрос на сервер для аутентификации
+      try {
+        // Выполняем запрос на сервер для аутентификации
         const response = await http(
           "https://studapi.teachmeskills.by/auth/jwt/create/",
           {
@@ -86,11 +99,15 @@ const SignInForm = (props: SignInFormProps) => {
         dispatch(setUserMailConfirmation(null)); // Сбрасываем email из состояния Redux
         navigate("/posts"); // Перенаправляем на страницу постов
       } catch (error) {
-        alert("Authentication failed: check your credentials"); // Выводим сообщение об ошибке
+        setShowAlert(true); // Выводим алерт с сообщением об ошибке
       }
     } else if (focusRef.current) {
       focusRef.current.focus(); // Фокусируем первое невалидное поле
     }
+  };
+
+  const handleCloseAlert = () => { // Функция для закрытия алерта
+    setShowAlert(false);
   };
 
   return (
@@ -108,6 +125,7 @@ const SignInForm = (props: SignInFormProps) => {
             onChange={email.onChange}
             placeholder="Your email"
             className={`signInForm__input ${!email.isValid ? "invalid" : ""}`}
+            autoComplete="username"
           />
         </div>
         <div className="signInForm__input-container">
@@ -124,6 +142,7 @@ const SignInForm = (props: SignInFormProps) => {
             className={`signInForm__input ${
               !password.isValid ? "invalid" : ""
             }`}
+            autoComplete="current-password"
           />
         </div>
         <Link to="/sign-up" className="links signInForm__forgot">
@@ -142,6 +161,12 @@ const SignInForm = (props: SignInFormProps) => {
       <button onClick={() => navigate("/posts")} className="buttonBack">
         Return to posts
       </button>
+      {showAlert && (
+        <Alert
+          text="Authentication failed: check your credentials"
+          onClose={handleCloseAlert}
+        />
+      )}
     </div>
   );
 };
