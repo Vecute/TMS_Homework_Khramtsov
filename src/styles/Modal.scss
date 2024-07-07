@@ -71,16 +71,17 @@
             position: absolute;
             top: 4px;
             right: 4px;
-
-            &:hover .modal__button:before {
-                transform: rotate(225deg);
-                background: var(--icon-hover-color)
-            }
-
-            &:hover .modal__button:after {
-                transform: rotate(-225deg);
-                background: var(--icon-hover-color)
-            }
+            @media (hover: hover) {
+                &:hover .modal__button:before {
+                    transform: rotate(225deg);
+                    background: var(--icon-hover-color)
+                }
+    
+                &:hover .modal__button:after {
+                    transform: rotate(-225deg);
+                    background: var(--icon-hover-color)
+                }
+              }
         }
     }
 

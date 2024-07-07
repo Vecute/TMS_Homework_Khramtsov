@@ -16,12 +16,14 @@
         padding: 7px;
         transition: all 0.3s linear;
         margin-bottom: 10px;
-        &:hover {
-            color: var(--button-font-hover-color);
-            background-color: var(--button-background-hover-color);
-            border: 1px solid var(--button-border-hover-color);
-            cursor: pointer;
-        }
+        @media (hover: hover) {
+            &:hover {
+                color: var(--button-font-hover-color);
+                background-color: var(--button-background-hover-color);
+                border: 1px solid var(--button-border-hover-color);
+                cursor: pointer;
+            }
+          }
     }
     &__text {
         margin-bottom: 10px;

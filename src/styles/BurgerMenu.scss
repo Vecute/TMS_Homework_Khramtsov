@@ -7,11 +7,13 @@
         display: flex;
         align-self: center;
         cursor: pointer;
-        &:hover::after, &:hover::before {
-          border-bottom: 3px solid var(--icon-hover-color);
-        }
-        &:hover .header__toggle-item {
-          border-bottom: 3px solid var(--icon-hover-color);
+        @media (hover: hover) {
+          &:hover::after, &:hover::before {
+            border-bottom: 3px solid var(--icon-hover-color);
+          }
+          &:hover .header__toggle-item {
+            border-bottom: 3px solid var(--icon-hover-color);
+          }
         }
         &::before {
           content: "";
@@ -81,9 +83,11 @@
             cursor: pointer;
             text-align: center;
             transition: all 0.3s linear;
-            &:hover {
+            @media (hover: hover) {
+              &:hover {
                 background-color: var(--header-hover-color);
                 color: var(--header-font-hover-color);
+            }
             }
         }
       }

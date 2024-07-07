@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../styles/AccountButton.scss";
+import "../styles/Account.scss";
 import "../styles/AccountModal.scss";
 import { useNavigate } from "react-router-dom";
 import { clearTokens, getAccessToken } from "../services/authToken";
@@ -44,6 +44,7 @@ const AccountButton = () => {
     // Обработчик выхода из аккаунта
     setIsAccountModalOpen(false); // Закрываем модальное окно
     clearTokens(); // Очищаем токены
+    navigate("/posts"); // Перенаправляем на страницу постов
   };
 
   useEffect(() => {

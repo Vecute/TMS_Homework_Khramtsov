@@ -101,8 +101,10 @@ body {
 .links {
   color: var(--link-color);
   cursor: pointer;
-  &:hover {
-    color: var(--link-hover-color);
+  @media (hover: hover) {
+    &:hover {
+      color: var(--link-hover-color);
+    }
   }
 }
 
@@ -128,8 +130,10 @@ body {
   transition: all 0.3s linear;
   position: relative;
   &.light {
-    &:hover svg {
-      fill: var(--icon-accent-color);
+    @media (hover: hover) {
+      &:hover svg {
+        fill: var(--icon-accent-color);
+      }
     }
     &.active {
       background-color: var(--icon-color);
@@ -137,8 +141,10 @@ body {
   }
 
   &.dark {
-    &:hover svg {
-      fill: var(--icon-accent-color);
+    @media (hover: hover) {
+      &:hover svg {
+        fill: var(--icon-accent-color);
+      }
     }
     &.active {
       background-color: var(--icon-color);

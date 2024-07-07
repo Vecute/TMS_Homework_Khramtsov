@@ -70,16 +70,17 @@
             right: 4px;
             background-color: var(--modal-image-button-color);
             border-radius: 10px;
-
-            &:hover .modal-image__button:before {
-                transform: rotate(225deg);
-                background: var(--modal-image-icon-hover-color)
-            }
-
-            &:hover .modal-image__button:after {
-                transform: rotate(-225deg);
-                background: var(--modal-image-icon-hover-color)
-            }
+            @media (hover: hover) {
+                &:hover .modal-image__button:before {
+                    transform: rotate(225deg);
+                    background: var(--modal-image-icon-hover-color)
+                }
+    
+                &:hover .modal-image__button:after {
+                    transform: rotate(-225deg);
+                    background: var(--modal-image-icon-hover-color)
+                }
+              }
         }
     }
 }

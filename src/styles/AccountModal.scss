@@ -43,12 +43,14 @@
         padding: 7px;
         transition: all 0.3s linear;
         margin-top: 20px;
-        &:hover {
-            color: var(--button-font-hover-color);
-            background-color: var(--button-background-hover-color);
-            border: 1px solid var(--button-border-hover-color);
-            cursor: pointer;
-        }
+        @media (hover: hover) {
+            &:hover {
+                color: var(--button-font-hover-color);
+                background-color: var(--button-background-hover-color);
+                border: 1px solid var(--button-border-hover-color);
+                cursor: pointer;
+            }
+          }
     }
 
     &__wrapper {
@@ -107,16 +109,17 @@
             right: 4px;
             background-color: var(--account-modal-button-color);
             border-radius: 10px;
-
-            &:hover .account-modal__button:before {
-                transform: rotate(225deg);
-                background: var(--account-modal-icon-hover-color)
-            }
-
-            &:hover .account-modal__button:after {
-                transform: rotate(-225deg);
-                background: var(--account-modal-icon-hover-color)
-            }
+            @media (hover: hover) {
+                &:hover .account-modal__button:before {
+                    transform: rotate(225deg);
+                    background: var(--account-modal-icon-hover-color)
+                }
+    
+                &:hover .account-modal__button:after {
+                    transform: rotate(-225deg);
+                    background: var(--account-modal-icon-hover-color)
+                }
+              }
         }
     }
 }

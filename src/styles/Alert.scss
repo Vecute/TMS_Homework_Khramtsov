@@ -56,14 +56,16 @@
       position: absolute;
       top: 4px;
       right: 4px;
-      &:hover .custom-alert__close-button:before {
-        transform: rotate(225deg);
-        background: var(--alert-icon-hover-color);
-      }
-
-      &:hover .custom-alert__close-button:after {
-        transform: rotate(-225deg);
-        background: var(--alert-icon-hover-color);
+      @media (hover: hover) {
+        &:hover .custom-alert__close-button:before {
+          transform: rotate(225deg);
+          background: var(--alert-icon-hover-color);
+        }
+  
+        &:hover .custom-alert__close-button:after {
+          transform: rotate(-225deg);
+          background: var(--alert-icon-hover-color);
+        }
       }
     }
   }

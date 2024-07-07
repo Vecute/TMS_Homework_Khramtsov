@@ -24,11 +24,13 @@
     padding: 7px;
     transition: all 0.3s linear;
     margin-bottom: 10px;
-    &:hover {
-      color: var(--button-font-hover-color);
-      background-color: var(--button-background-hover-color);
-      border: 1px solid var(--button-border-hover-color);
-      cursor: pointer;
+    @media (hover: hover) {
+      &:hover {
+        color: var(--button-font-hover-color);
+        background-color: var(--button-background-hover-color);
+        border: 1px solid var(--button-border-hover-color);
+        cursor: pointer;
+      }
     }
   }
   &__buttons-block {
@@ -63,9 +65,11 @@
     font-weight: 600;
     transition: all 0.3s linear;
     margin: 0 10px;
-    &:hover {
-      color: var(--add-post-input-reset-hover-color);
-      cursor: pointer;
+    @media (hover: hover) {
+      &:hover {
+        color: var(--add-post-input-reset-hover-color);
+        cursor: pointer;
+      }
     }
   }
 
@@ -79,9 +83,11 @@
     color: var(--cancel-button-font-color);
     background-color: var(--cancel-button-background-color);
     border: 1px solid var(--cancel-button-border-color);
-    &:hover {
-      background-color: var(--cancel-button-hover-background-color);
-      color: var(--cancel-button-hover-font-color);
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--cancel-button-hover-background-color);
+        color: var(--cancel-button-hover-font-color);
+      }
     }
   }
 
@@ -121,10 +127,11 @@ input[type="file"]::file-selector-button {
   transition: all 0.3s linear;
   font-size: 16px;
 }
-
-input[type="file"]::file-selector-button:hover {
-  color: var(--button-font-hover-color);
-  background-color: var(--button-background-hover-color);
-  border: 1px solid var(--button-border-hover-color);
-  cursor: pointer;
+@media (hover: hover) {
+  input[type="file"]::file-selector-button:hover {
+    color: var(--button-font-hover-color);
+    background-color: var(--button-background-hover-color);
+    border: 1px solid var(--button-border-hover-color);
+    cursor: pointer;
+  }
 }

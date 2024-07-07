@@ -9,7 +9,9 @@
         transition: all 0.3s linear;
       }
   
+    @media (hover: hover) {
       &:hover path {
         fill: var(--icon-hover-color);
       }
+    }
 }
