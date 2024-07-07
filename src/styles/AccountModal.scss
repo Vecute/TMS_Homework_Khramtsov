@@ -109,23 +109,12 @@
       right: 4px;
       background-color: var(--account-modal-button-color);
       border-radius: 10px;
-      @media (hover: hover) {
-        &:hover .account-modal__button:before {
-          transform: rotate(225deg);
-          background: var(--account-modal-icon-hover-color);
-        }
-
-        &:hover .account-modal__button:after {
-          transform: rotate(-225deg);
-          background: var(--account-modal-icon-hover-color);
-        }
-      }
-      &:active .account-modal__button:before {
+      &:hover .account-modal__button:before {
         transform: rotate(225deg);
         background: var(--account-modal-icon-hover-color);
       }
 
-      &:active .account-modal__button:after {
+      &:hover .account-modal__button:after {
         transform: rotate(-225deg);
         background: var(--account-modal-icon-hover-color);
       }
