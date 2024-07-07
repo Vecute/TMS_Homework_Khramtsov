@@ -18,6 +18,7 @@ const AccountButton = () => {
     const token = getAccessToken(); // Получаем access_token
     if (token) {
       setIsAccountModalOpen(true); // Открываем модальное окно
+      
       try {
         const response = await http(
           "https://studapi.teachmeskills.by/auth/users/me/",
@@ -37,7 +38,13 @@ const AccountButton = () => {
 
   const handleCloseAccountModal = () => {
     // Обработчик закрытия модального окна
-    setIsAccountModalOpen(false); // Закрываем модальное окно
+    const modal = document.querySelector('.account-modal');
+    if (modal) {
+      modal.classList.add("hidden"); // Добавляем класс hidden для анимации закрытия
+    }
+    setTimeout(() => {
+      setIsAccountModalOpen(false); // Закрываем модальное окно с задержкой, чтобы успела отработать анимация
+    }, 300);
   };
 
   const handleLogOut = () => {

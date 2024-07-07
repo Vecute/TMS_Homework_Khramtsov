@@ -20,7 +20,13 @@ export const PostModal = () => {
 
     // Функция handleClose, которая закрывает модальное окно, устанавливая selectedPost в null
     const handleClose = () => {
-        dispatch(setSelectedPost(null)); 
+        const modal = document.querySelector('.modal');
+        if (modal) {
+          modal.classList.add("hidden"); // Добавляем класс hidden для анимации закрытия
+        }
+        setTimeout(() => {
+            dispatch(setSelectedPost(null)); ; // Закрываем модальное окно с задержкой, чтобы успела отработать анимация
+        }, 300);
     }
 
     // useEffect, который добавляет слушатель событий на клик вне модального окна
