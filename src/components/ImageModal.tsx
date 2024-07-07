@@ -22,7 +22,13 @@ export const ImageModal = () => {
 
   // Объявление функции handleClose, которая отправляет действие setSelectedImage с null в Redux, сбрасывая выбранное изображение
   const handleClose = () => {
-    dispatch(setSelectedImage(null));
+    const modal = document.querySelector('.modal-image');
+    if (modal) {
+      modal.classList.add("hidden"); // Добавляем класс hidden для анимации закрытия
+    }
+    setTimeout(() => {
+        dispatch(setSelectedImage(null)); ; // Закрываем модальное окно с задержкой, чтобы успела отработать анимация
+    }, 300);
   };
 
   // Использование хука useEffect для добавления обработчика событий, который закрывает модальное окно при клике вне изображения
