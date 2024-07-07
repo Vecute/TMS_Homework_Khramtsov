@@ -1,125 +1,134 @@
 .account-modal {
-    animation: modalFadeIn 0.3s ease-out forwards;
-    margin: auto;
-    width: calc(100% - 10px);
-    height: calc(100dvh - 20px);
+  animation: modalFadeIn 0.3s ease-out forwards;
+  margin: auto;
+  width: calc(100% - 10px);
+  height: calc(100dvh - 20px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__content {
+    background-color: var(--background-color);
+    border: 1px solid var(--modal-border-color);
+    max-width: 100%;
+    border-radius: 10px;
+    padding: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+  }
 
-    &__content {
-        background-color: var(--background-color);
-        border: 1px solid var(--modal-border-color);
-        max-width: 100%;
-        border-radius: 10px;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
+  &__title {
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 20px;
+  }
+
+  &__data {
+    font-size: 20px;
+    margin-bottom: 10px;
+    word-break: break-all;
+  }
+
+  &__values {
+    font-style: italic;
+    color: var(--account-modal-font-color);
+  }
+
+  &__button-logout {
+    color: var(--button-font-color);
+    background-color: var(--button-background-color);
+    border: 1px solid var(--button-border-color);
+    box-shadow: 0 0 8px 0 var(--shadow-color);
+    border-radius: 4px;
+    padding: 7px;
+    transition: all 0.3s linear;
+    margin-top: 20px;
+    @media (hover: hover) {
+      &:hover {
+        color: var(--button-font-hover-color);
+        background-color: var(--button-background-hover-color);
+        border: 1px solid var(--button-border-hover-color);
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__wrapper {
+    z-index: 3;
+    margin: auto;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background-color: var(--account-modal-background-color);
+  }
+
+  @media only screen and (max-height: 600px) {
+    margin: 0 auto;
+  }
+
+  & .post-card {
+    margin: auto;
+  }
+
+  &__button {
+    width: inherit;
+    width: 40px;
+    height: 40px;
+
+    &:before {
+      top: calc(50% - 2px);
+      transform: rotate(45deg);
+      position: absolute;
+      content: "";
+      height: 2px;
+      width: inherit;
+      background: var(--account-modal-icon-color);
+      left: 0;
+      transition: all 0.3s ease-in;
     }
 
-    &__title {
-        text-align: center;
-        font-size: 26px;
-        margin-bottom: 20px;
-    }
-    
-    &__data {
-        font-size: 20px;
-        margin-bottom: 10px;
-        word-break: break-all
-    }
-
-    &__values {
-        font-style: italic;
-        color: var(--account-modal-font-color);
+    &:after {
+      bottom: 50%;
+      transform: rotate(-45deg);
+      position: absolute;
+      content: "";
+      height: 2px;
+      width: inherit;
+      background: var(--account-modal-icon-color);
+      left: 0;
+      transition: all 0.3s ease-in;
     }
 
-    &__button-logout {
-        color: var(--button-font-color);
-        background-color: var(--button-background-color);
-        border: 1px solid var(--button-border-color);
-        box-shadow: 0 0 8px 0 var(--shadow-color);
-        border-radius: 4px;
-        padding: 7px;
-        transition: all 0.3s linear;
-        margin-top: 20px;
-        @media (hover: hover) {
-            &:hover {
-                color: var(--button-font-hover-color);
-                background-color: var(--button-background-hover-color);
-                border: 1px solid var(--button-border-hover-color);
-                cursor: pointer;
-            }
-          }
-    }
-
-    &__wrapper {
-        z-index: 3;
-        margin: auto;
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 10px;
-        background-color: var(--account-modal-background-color);
-    }
-
-    @media only screen and (max-height: 600px) {
-        margin: 0 auto;
-    }
-
-    & .post-card {
-        margin: auto;
-    }
-
-    &__button {
-        width: inherit;
-        width: 40px;
-        height: 40px;
-
-        &:before {
-            top: calc(50% - 2px);
-            transform: rotate(45deg);
-            position: absolute;
-            content: '';
-            height: 2px;
-            width: inherit;
-            background: var(--account-modal-icon-color);
-            left: 0;
-            transition: all .3s ease-in;
+    &-wrapper {
+      cursor: pointer;
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background-color: var(--account-modal-button-color);
+      border-radius: 10px;
+      @media (hover: hover) {
+        &:hover .account-modal__button:before {
+          transform: rotate(225deg);
+          background: var(--account-modal-icon-hover-color);
         }
 
-        &:after {
-            bottom: 50%;
-            transform: rotate(-45deg);
-            position: absolute;
-            content: '';
-            height: 2px;
-            width: inherit;
-            background: var(--account-modal-icon-color);
-            left: 0;
-            transition: all .3s ease-in;
+        &:hover .account-modal__button:after {
+          transform: rotate(-225deg);
+          background: var(--account-modal-icon-hover-color);
         }
+      }
+      &:active .account-modal__button:before {
+        transform: rotate(225deg);
+        background: var(--account-modal-icon-hover-color);
+      }
 
-        &-wrapper {
-            cursor: pointer;
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background-color: var(--account-modal-button-color);
-            border-radius: 10px;
-            @media (hover: hover) {
-                &:hover .account-modal__button:before {
-                    transform: rotate(225deg);
-                    background: var(--account-modal-icon-hover-color)
-                }
-    
-                &:hover .account-modal__button:after {
-                    transform: rotate(-225deg);
-                    background: var(--account-modal-icon-hover-color)
-                }
-              }
-        }
+      &:active .account-modal__button:after {
+        transform: rotate(-225deg);
+        background: var(--account-modal-icon-hover-color);
+      }
     }
+  }
 }
