@@ -1,11 +1,9 @@
 .account-modal {
   animation: modalFadeIn 0.3s ease-out forwards;
-  margin: auto;
-  width: calc(100% - 10px);
-  height: calc(100dvh - 20px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: fit-content;
+  margin: 0 auto 10px;
+  max-height: 100dvh;
+  position: relative;
 
   &__content {
     background-color: var(--background-color);
@@ -54,7 +52,7 @@
   }
 
   &__wrapper {
-    z-index: 3;
+    z-index: 1;
     margin: auto;
     position: fixed;
     top: 0;
@@ -75,8 +73,8 @@
 
   &__button {
     width: inherit;
-    width: 40px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
 
     &:before {
       top: calc(50% - 2px);
@@ -85,7 +83,7 @@
       content: "";
       height: 2px;
       width: inherit;
-      background: var(--account-modal-icon-color);
+      background: var(--icon-color);
       left: 0;
       transition: all 0.3s ease-in;
     }
@@ -97,7 +95,7 @@
       content: "";
       height: 2px;
       width: inherit;
-      background: var(--account-modal-icon-color);
+      background: var(--icon-color);
       left: 0;
       transition: all 0.3s ease-in;
     }
@@ -107,8 +105,6 @@
       position: absolute;
       top: 4px;
       right: 4px;
-      background-color: var(--account-modal-button-color);
-      border-radius: 10px;
       &:hover .account-modal__button:before {
         transform: rotate(225deg);
         background: var(--account-modal-icon-hover-color);

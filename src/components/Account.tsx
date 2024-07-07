@@ -62,6 +62,15 @@ const AccountButton = () => {
     };
   }, []);
 
+  // useEffect, который запрещает прокрутку страницы, когда модальное окно открыто
+  useEffect(() => {
+    if (isAccountModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isAccountModalOpen]);
+
   return (
     <>
       <button onClick={handleButtonClick} className="account-button">
