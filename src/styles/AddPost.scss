@@ -65,7 +65,7 @@
     font-size: 20px;
     font-weight: 600;
     transition: all 0.3s linear;
-    margin: 0 10px;
+    margin: 0 10px 3px;
     @media (hover: hover) {
       &:hover {
         color: var(--add-post-input-reset-hover-color);
