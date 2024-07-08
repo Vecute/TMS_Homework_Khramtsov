@@ -6,6 +6,7 @@
     height: 35px;
     cursor: pointer;
     position: relative;
+    touch-action: manipulation;
     & path {
       fill: var(--icon-color);
       transition: all 0.3s linear;
