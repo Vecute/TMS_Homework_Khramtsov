@@ -14,4 +14,7 @@
         display: flex;
         justify-content: center;
     }
+    &__search {
+        justify-content: flex-start;
+    }
 }

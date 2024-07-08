@@ -12,7 +12,7 @@ const TemplatePage = (props: TemplatePageProps) => {
   const { searchQuery } = useSearch();
 
   return (
-    <div className="template">
+    <div className={`template ${title === "Search" ? "template__search" : ""}`}>
       <div className="main-container">
         <h1 className='template__title'>{title === "Search" ? (searchQuery === '' ? 'Enter a search query' : `Search results: "${searchQuery}"`) : title}</h1>
         <div className='template__container'>
