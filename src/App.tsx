@@ -2,7 +2,7 @@ import "./styles/App.scss";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AccountButton from "./components/Account";
-import SearchButton, { SearchProvider } from "./components/SearchButton";
+import SearchButton, { SearchProvider } from "./components/Search";
 import BurgerMenu from "./components/BurgerMenu";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PostsPage from "./pages/PostsPage";

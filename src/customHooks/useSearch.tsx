@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SearchContext } from "../components/SearchButton";
+import { SearchContext } from "../components/Search";
 
 const useSearch = () => { // Кастомный хук для использования контекста поиска
     const context = useContext(SearchContext); // Использование хука useContext для доступа к контексту поиска

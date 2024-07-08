@@ -21,7 +21,7 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   );
 };
 
-const SearchButton = () => {
+const Search = () => {
   const { searchQuery, setSearchQuery } = useSearch(); // Использование кастомного хука useSearch для доступа к поисковому запросу и функции для его изменения
   const [showSearchInput, setShowSearchInput] = useState(false); // Использование хука состояния для отображения или скрытия поля ввода
   const inputRef = useRef<HTMLInputElement>(null); // Использование хука useRef для доступа к DOM-элементу поля ввода
@@ -29,14 +29,16 @@ const SearchButton = () => {
   const location = useLocation(); // Получение текущего местоположения
   const isSearchPage = location.pathname === "/search"; // Проверка, является ли текущая страница страницей поиска
 
-  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => { // Обработчик изменения поля ввода
-    setSearchQuery(event.target.value); // Установка нового значения поискового запроса
-  };
+  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newQuery = event.target.value; // Получаем новое значение поискового запроса из поля ввода 
+    setSearchQuery(event.target.value); // Обновляем состояние searchQuery в контексте поиска
 
-  const handleSearchSubmit = (event: React.FormEvent) => { // Обработчик отправки формы
-    event.preventDefault(); // Предотвращение стандартного поведения формы
-    if (searchQuery.trim() !== "") { // Если поисковый запрос не пустой...
-      navigate("/search"); // ...вызывается функция для изменения страницы
+    if (newQuery.trim() !== "") { // Проверяем, не пустой ли новый поисковый запрос
+      // Если запрос не пустой, выполняем переход на страницу поиска с новым значением запроса в параметре `q` URL-адреса
+      navigate(`/search?q=${newQuery}`);
+    } else {
+      // Если новый поисковый запрос пустой, переходим на страницу поиска без параметров в URL-адресе
+      navigate(`/search`);
     }
   };
 
@@ -54,10 +56,23 @@ const SearchButton = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]); // Эффект зависит от текущего местоположения
 
+  useEffect(() => {
+    // Создаем объект URLSearchParams из строки location.search
+    const queryParams = new URLSearchParams(location.search);
+    // Извлекаем значение параметра "q" из queryParams
+    const searchQueryFromUrl = queryParams.get("q");
+    // Проверяем, найден ли параметр "q"
+    if (searchQueryFromUrl) {
+      // Если параметр "q" найден, обновляем state searchQuery
+      setSearchQuery(searchQueryFromUrl);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
+
   return (
     <Fragment>
       {showSearchInput ? (
-        <form onSubmit={handleSearchSubmit} className="search-form">
+        <form className="search-form">
           <input
             ref={inputRef}
             type="text"
@@ -81,4 +96,4 @@ const SearchButton = () => {
   );
 };
 
-export default SearchButton;
+export default Search;
