@@ -31,7 +31,7 @@ const AddPost: React.FC = () => {
   // Состояние для отображения уведомления
   const [showAlert, setShowAlert] = useState(false);
   // Состояние для текста уведомления
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState("");
 
   // Обработчик изменения полей формы
   const handleChange = (
@@ -39,7 +39,7 @@ const AddPost: React.FC = () => {
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;  // Получаем имя и значение измененного поля
+    const { name, value } = e.target; // Получаем имя и значение измененного поля
     setPost((prevPost) => ({ ...prevPost, [name]: value })); // Обновляем состояние поста
   };
 
@@ -47,7 +47,11 @@ const AddPost: React.FC = () => {
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null; // Получаем выбранный файл
     setSelectedFile(file); // Обновляем состояние выбранного файла
-    if (file) setPost((prevPost) => ({ ...prevPost, image: file })); // Обновляем состояние поста с новым файлом
+    if (file)
+      setPost((prevPost) => ({
+        ...prevPost,
+        image: file,
+      })); // Обновляем состояние поста с новым файлом
     else setPost((prevPost) => ({ ...prevPost, image: null })); // Обновляем состояние поста, если файл не выбран
   };
 
@@ -90,7 +94,7 @@ const AddPost: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Предотвращаем стандартное поведение формы
     if (!post.image) {
-      setAlertMessage('Please insert a picture') // Устанавливаем текст уведомления
+      setAlertMessage("Please insert a picture"); // Устанавливаем текст уведомления
       setShowAlert(true); // Отображаем уведомление, если файл не выбран
       return;
     }
@@ -130,7 +134,7 @@ const AddPost: React.FC = () => {
       }); // Сбрасываем состояние поста
     } catch (error) {
       console.error("Error submitting post:", error); // Выводим сообщение об ошибке в консоль
-      setAlertMessage("Error loading the post") // Устанавливаем текст уведомления
+      setAlertMessage("Error loading the post"); // Устанавливаем текст уведомления
       setShowAlert(true); // Отображаем уведомление об ошибке
     }
   };
@@ -214,13 +218,19 @@ const AddPost: React.FC = () => {
           />
         </div>
         <div className="addPost__buttons-block">
-          <button
-            type="button"
-            onClick={handleDeleteClick}
-            className="addPost__button addPost__delete"
-          >
-            Delete post
-          </button>
+          {post.title ||
+          post.lessonNumber ||
+          post.description ||
+          post.text ||
+          selectedFile ? (
+            <button
+              type="button"
+              onClick={handleDeleteClick}
+              className="addPost__button addPost__delete"
+            >
+              Delete post
+            </button>
+          ) : null}
           <div className="addPost__main-buttons">
             <button
               type="button"
@@ -238,9 +248,7 @@ const AddPost: React.FC = () => {
       <button onClick={() => navigate("/posts")} className="buttonBack">
         Return to posts
       </button>
-      {showAlert && (
-        <Alert text={alertMessage} onClose={handleCloseAlert} />
-      )}
+      {showAlert && <Alert text={alertMessage} onClose={handleCloseAlert} />}
     </div>
   );
 };
