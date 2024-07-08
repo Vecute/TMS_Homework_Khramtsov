@@ -43,9 +43,12 @@
   --add-post-input-font-color: #444444;
   --add-post-input-reset-color: #ff0000;
   --add-post-input-reset-hover-color: #444444;
-  --delete-button-color: #d43e3e;
-  --delete-button-font-color: #eeeeee;
-  --delete-button-border-color: #333333;
+  --delete-button-color: transparent;
+  --delete-button-font-color: #f15a5a;
+  --delete-button-border-color: #f15a5a;
+  --delete-button-hover-color: #f15a5a;
+  --delete-button-font-hover-color: #eeeeee;
+  --delete-button-border-hover-color: #eeeeee;
   --cancel-button-font-color: #6495ed;
   --cancel-button-border-color: #6495ed;
   --cancel-button-background-color: #eeeeee;
@@ -85,7 +88,6 @@
   --shadow-color: #8680804d;
   --border-color: #333333;
   --spinner-circle-color: #eeeeee;
-  --delete-button-border-color: #eeeeee;
   --cancel-button-font-color: #eeeeee;
   --cancel-button-border-color: #eeeeee;
   --cancel-button-background-color: #333333;

@@ -78,6 +78,13 @@
     color: var(--delete-button-font-color);
     background-color: var(--delete-button-color);
     border: 1px solid var(--delete-button-border-color);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--delete-button-font-hover-color);
+        background-color: var(--delete-button-hover-color);
+        border: 1px solid var(--delete-button-border-hover-color);
+      }
+    }
   }
 
   &__cancel {
