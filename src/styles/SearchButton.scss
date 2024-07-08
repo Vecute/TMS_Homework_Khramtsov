@@ -6,7 +6,6 @@
     height: 35px;
     cursor: pointer;
     position: relative;
-    touch-action: manipulation;
     & path {
       fill: var(--icon-color);
       transition: all 0.3s linear;
@@ -35,6 +34,7 @@
     padding: 7px;
     width: 100%;
     background: var(--input-background-color);
+    font-size: 16px;
     @media (hover: hover) {
       &:hover {
         border: 1px solid var(--border-hover-color);
