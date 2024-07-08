@@ -98,7 +98,7 @@ const AddPost: React.FC = () => {
     try {
       const formData = new FormData(); // Создаем FormData для отправки файла
       formData.append("title", post.title);
-      formData.append("lessonNumber", post.lessonNumber.toString());
+      formData.append("lesson_num", post.lessonNumber.toString());
       formData.append("description", post.description);
       formData.append("text", post.text);
       formData.append("image", post.image);
