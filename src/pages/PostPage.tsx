@@ -1,4 +1,4 @@
-import "../styles/PostList.scss"; 
+import "../styles/PostList.scss";
 import TemplatePage from "./TemplatePage";
 import { PostCard } from "../components/PostCard";
 import { useParams, useNavigate } from "react-router-dom";
@@ -24,10 +24,18 @@ const PostPage = () => {
 
   // Обработчик события клика по изображению
   const handleOpenImagePopUp = () => {
-    // Если у поста есть свойство image...
     if (post?.image) {
-      // ...то диспатчим экшен setSelectedImage с URL изображения
-      dispatch(setSelectedImage(post.image));
+      // Проверка на загрузку изображения
+      const img = new Image();
+      img.onload = () => {
+        // Если изображение загрузилось успешно, диспатчим экшен
+        dispatch(setSelectedImage(post.image));
+      };
+      img.onerror = () => {
+        // Если изображение не загрузилось, используем заглушку
+        dispatch(setSelectedImage("/fallback.png"));
+      };
+      img.src = post.image;
     }
   };
 
@@ -41,8 +49,7 @@ const PostPage = () => {
     // Отображаем сообщение о загрузке
     return (
       <div className="post__loading">
-        <div className="spinner">
-        </div>
+        <div className="spinner"></div>
       </div>
     );
   }
@@ -69,7 +76,7 @@ const PostPage = () => {
           Return to posts
         </button>
       </div>
-      <ImageModal /> 
+      <ImageModal />
     </TemplatePage>
   );
 };
