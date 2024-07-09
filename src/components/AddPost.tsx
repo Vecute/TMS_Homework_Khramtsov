@@ -158,6 +158,7 @@ const AddPost: React.FC = () => {
             value={post.title}
             onChange={handleChange}
             className="addPost__input"
+            placeholder="Add a title"
           />
         </div>
         <div className="addPost__element">
@@ -182,6 +183,7 @@ const AddPost: React.FC = () => {
               type="file"
               accept="image/png, image/jpeg"
               onChange={handleFileChange}
+              className="addPost__input-image"
             />
             {selectedFile && (
               <input
@@ -203,6 +205,7 @@ const AddPost: React.FC = () => {
             value={post.description}
             onChange={handleChange}
             className="addPost__input"
+            placeholder="Add a description"
           />
         </div>
         <div className="addPost__element">
@@ -215,6 +218,7 @@ const AddPost: React.FC = () => {
             value={post.text}
             onChange={handleChange}
             className="addPost__input"
+            placeholder="Add a text"
           />
         </div>
         <div className="addPost__buttons-block">

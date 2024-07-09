@@ -8,7 +8,7 @@
   justify-content: center;
   margin-bottom: 10px;
   &__label {
-    font-size: 24px;
+    font-size: 18px;
   }
   &__element {
     display: flex;
@@ -44,8 +44,11 @@
     margin-left: auto;
   }
 
-  &__image-input {
-    display: flex;
+  &__input-image {
+    font-size: 16px;
+    &:focus {
+      outline-color: var(--border-hover-color);
+    }
   }
 
   &__image-wrapper {
@@ -109,7 +112,11 @@
     border: 1px solid var(--border-color);
     box-shadow: 0 0 8px 0 var(--shadow-color);
     padding: 5px;
-    font-size: 18px;
+    font-size: 16px;
+
+    &:focus {
+      outline-color: var(--border-hover-color);
+    }
   }
 }
 
@@ -143,4 +150,3 @@ input[type="file"]::file-selector-button {
     cursor: pointer;
   }
 }
-
