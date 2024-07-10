@@ -57,14 +57,21 @@ const PostPage = () => {
   // Если пост не найден (post === undefined)...
   if (!post) {
     // ...то отображаем сообщение об ошибке
-    return <div className="post-empty">No posts found 😭</div>;
+    return (
+      <div className="empty-post">
+        <div className="post-empty">No posts found 😭</div>
+        <button onClick={() => navigate("/posts")} className="buttonBack">
+          Return to posts
+        </button>
+      </div>
+    );
   }
 
   return (
     <TemplatePage title={post.title}>
       <div className="post-single">
         <PostCard
-          description={post.description}
+          description={post.description || (post.text || '')}
           id={post.id}
           date={post.date}
           title={post.title}

@@ -14,6 +14,7 @@ export type PostType = {
   description: string;
   date: string;
   title: string;
+  text?: string;
 };
 
 // Определение пропсов для компонента PostCard, расширяет PostType
@@ -24,7 +25,7 @@ export interface PostProps extends PostType {
   onFavoriteClick?: (id: number) => void;
 };
 
-export const PostCard = ({ id, image, description, date, title, size, onImageClick, onFavoriteClick }: PostProps) => {
+export const PostCard = ({ id, image, description, date, title, size, onImageClick, onFavoriteClick, text}: PostProps) => {
   const navigate = useNavigate(); // Инициализация хука useNavigate
   const dispatch = useDispatch(); // Инициализация хука useDispatch
 
@@ -62,9 +63,15 @@ export const PostCard = ({ id, image, description, date, title, size, onImageCli
     const target = event.target as HTMLElement; // Приводим event.target к типу HTMLElement
     const isButtonClick = target.classList.contains("post-card__button") || target.closest(".post-card__button"); // Проверяем, кликнули ли по кнопке внутри карточки
     const isModalClick = target.closest(".modal"); // Проверяем, кликнули ли по модальному окну
+    const myPosts = target.closest(".my-posts"); // Проверяем был ли клик на странице постов авторизованного пользователя
 
-    if (!isButtonClick && !isModalClick) { // Если не клик по кнопке и не по модальному окну
+
+    if (!isButtonClick && !isModalClick && !myPosts && !(window.location.pathname.includes('/my-posts/'))) { // Если клик был не по кнопке, не по модальному окну, не по странице пользовательских постов и в адресной строке нету /my-posts/
       navigate(`/posts/${id}`); // Переходим на страницу поста
+    }
+
+    if (!isButtonClick && !isModalClick && myPosts) { // Если клик был не по кнопке, не по модальному окну, но по странице пользовательских постов
+      navigate(`/my-posts/${id}`); // Переходим на страницу поста авторизованного пользователя
     }
   };
 
@@ -87,7 +94,7 @@ export const PostCard = ({ id, image, description, date, title, size, onImageCli
         <img src={image} alt={title} onClick={onImageClick} className="post__image" onError={(e) => {(e.target as HTMLImageElement).src = "/fallback.png";}}/>
       )}
       <h2>{title}</h2>
-      <p className="post-card__description">{description}</p>
+      <p className="post-card__description">{description || text}</p>
       <p className="post-card__date">{date}</p>
       <div className="post-card__bottom-menu">
         <div className="post-card__likes-menu">

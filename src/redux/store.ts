@@ -6,6 +6,7 @@ import likesDislikesReducer from "./likesDislikesReducer";
 import likeStatesReducer from "./likeStatesReducer";
 import favoritesReducer from "./favoritesReducer";
 import postsReducer from "./postsReducer";
+import myPostsReducer from "./myPostsReducer";
 import userMailConfirmationReducer from "./userMailConfirmationReducer";
 import { useDispatch } from "react-redux";
 import { thunk } from "redux-thunk";
@@ -19,6 +20,7 @@ const combineReducer = combineReducers({
         likeStatesReducer,           // Редюсер для состояния лайков/дизлайков
         favoritesReducer,            // Редюсер для избранного
         postsReducer,                // Редюсер для постов
+        myPostsReducer,              // Редюсер для постов авторизованного пользователя
         userMailConfirmationReducer, // Редюсер для подтверждения почты
     }
 )

@@ -4,6 +4,7 @@ import "../styles/AccountModal.scss";
 import { useNavigate } from "react-router-dom";
 import { clearTokens, getAccessToken } from "../services/authToken";
 import { useHttp } from "../services/authToken";
+import { deleteMyPostsToLocalStorage } from "../redux/myPostsReducer";
 
 const AccountButton = () => {
   const navigate = useNavigate(); // Создаем объект для навигации
@@ -18,7 +19,7 @@ const AccountButton = () => {
     const token = getAccessToken(); // Получаем access_token
     if (token) {
       setIsAccountModalOpen(true); // Открываем модальное окно
-      
+
       try {
         const response = await http(
           "https://studapi.teachmeskills.by/auth/users/me/",
@@ -38,7 +39,7 @@ const AccountButton = () => {
 
   const handleCloseAccountModal = () => {
     // Обработчик закрытия модального окна
-    const modal = document.querySelector('.account-modal');
+    const modal = document.querySelector(".account-modal");
     if (modal) {
       modal.classList.add("hidden"); // Добавляем класс hidden для анимации закрытия
     }
@@ -51,6 +52,7 @@ const AccountButton = () => {
     // Обработчик выхода из аккаунта
     setIsAccountModalOpen(false); // Закрываем модальное окно
     clearTokens(); // Очищаем токены
+    deleteMyPostsToLocalStorage() // Удаляем пользовательские посты из localStorage
     navigate("/posts"); // Перенаправляем на страницу постов
   };
 

@@ -17,6 +17,8 @@ import { Provider } from "react-redux";
 import UnknownPage from "./pages/UnknownPage";
 import RegistrationValidationPage from "./pages/RegistrationValidationPage";
 import AddPostPage from "./pages/AddPostPage";
+import UserPostsPage from "./pages/UserPostsPage";
+import MyPostPage from "./pages/MyPostPage";
 
 function App() {
   return (
@@ -34,7 +36,9 @@ function App() {
               <Route path="/registration-validation" element={<RegistrationValidationPage />} />
               <Route path="/success" element={<EmailConfirmedPage />} />
               <Route path="/add-post" element={<AddPostPage />} />
+              <Route path="/my-posts" element={<UserPostsPage />} />
               <Route path="/posts/:postId" element={<PostPage />} />
+              <Route path="/my-posts/:postId" element={<MyPostPage />} />
               <Route path="*" element={<UnknownPage />} />
             </Routes>
             <Header>

@@ -111,6 +111,7 @@
     padding: 30px;
     box-shadow: 0 0 8px 0 var(--shadow-color);
     font-size: 40px;
+    margin-bottom: 10px;
 
     @media only screen and (max-width: 430px) {
       font-size: 30px;
@@ -307,4 +308,67 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.my-posts {
+  max-width: 1460px;
+  grid-template-columns: repeat(6, 1fr);
+  @media only screen and (max-width: 1000px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media only screen and (max-width: 550px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media only screen and (max-width: 400px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  & .post-card {
+    grid-column: span 2;
+    grid-row: span 1;
+    @media only screen and (max-width: 400px) {
+      grid-column: span 1;
+      grid-row: span 1;
+    }
+    & .post-card__likes-menu {
+      display: none;
+    }
+
+    & .post-card__favorite {
+      display: none;
+    }
+    & .post-card__bottom-menu {
+      margin-left: auto;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__single {
+    & .post-card__bottom-menu {
+      display: none;
+    }
+  }
+
+  &__buttonDelete {
+    color: var(--delete-button-font-color);
+    background-color: var(--delete-button-color);
+    border: 1px solid var(--delete-button-border-color);
+    margin-right: 20px;
+    @media (hover: hover) {
+      &:hover {
+        color: var(--delete-button-font-hover-color);
+        background-color: var(--delete-button-hover-color);
+        border: 1px solid var(--delete-button-border-hover-color);
+      }
+    }
+  }
+}
+
+.empty-post {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
