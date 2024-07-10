@@ -60,6 +60,7 @@
     border-radius: 10px;
     border: 1px solid var(--border-color);
     box-shadow: 0 0 8px 0 var(--shadow-color);
+    position: relative;
   }
   &__image-reset {
     color: var(--add-post-input-reset-color);
@@ -68,7 +69,10 @@
     font-size: 20px;
     font-weight: 600;
     transition: all 0.3s linear;
-    margin: 0 10px 3px;
+    position: absolute;
+    top: 2px;
+    right: 3px;
+    padding: 0 5px;
     @media (hover: hover) {
       &:hover {
         color: var(--add-post-input-reset-hover-color);
