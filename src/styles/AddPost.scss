@@ -47,7 +47,7 @@
   &__input-image {
     font-size: 16px;
     &:focus {
-      outline-color: var(--border-hover-color);
+      outline-color: var(--focus-color);
     }
   }
 
@@ -115,7 +115,7 @@
     font-size: 16px;
 
     &:focus {
-      outline-color: var(--border-hover-color);
+      outline-color: var(--focus-color);
     }
   }
 }
