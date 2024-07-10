@@ -20,6 +20,10 @@
     font-size: 16px;
   }
 
+  p {
+    text-align: center;
+  }
+
   &.hidden {
     animation: modalFadeOut 0.3s ease-out forwards;
   }

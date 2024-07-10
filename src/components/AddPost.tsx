@@ -30,8 +30,9 @@ const AddPost: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   // Состояние для отображения уведомления
   const [showAlert, setShowAlert] = useState(false);
-  // Состояние для текста уведомления
+  // Состояние для текста и цвета уведомления
   const [alertMessage, setAlertMessage] = useState("");
+  const [alertColor, setAlertColor] = useState("var(--alert-background-error-color)");
 
   // Обработчик изменения полей формы
   const handleChange = (
@@ -95,6 +96,7 @@ const AddPost: React.FC = () => {
     e.preventDefault(); // Предотвращаем стандартное поведение формы
     if (!post.image) {
       setAlertMessage("Please insert a picture"); // Устанавливаем текст уведомления
+      setAlertColor('var(--alert-background-error-color)') // Устанавливаем цвет уведомления
       setShowAlert(true); // Отображаем уведомление, если файл не выбран
       return;
     }
@@ -111,9 +113,6 @@ const AddPost: React.FC = () => {
         "https://studapi.teachmeskills.by/blog/posts/",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
           body: formData,
         }
       ); // Отправляем HTTP-запрос на сервер
@@ -124,17 +123,14 @@ const AddPost: React.FC = () => {
 
       const data = await response.json(); // Получаем ответ от сервера
       console.log("Post submitted successfully:", data); // Выводим сообщение об успешной отправке поста
-
-      setPost({
-        title: "",
-        lessonNumber: 0,
-        description: "",
-        text: "",
-        image: null,
-      }); // Сбрасываем состояние поста
+      setAlertMessage("Post sent successfully"); // Устанавливаем текст уведомления
+      setAlertColor('var(--alert-background-success-color)') // Устанавливаем цвет уведомления
+      setShowAlert(true); // Отображаем уведомление
+      handleDeleteClick() // Очищаем все поля
     } catch (error) {
       console.error("Error submitting post:", error); // Выводим сообщение об ошибке в консоль
       setAlertMessage("Error loading the post"); // Устанавливаем текст уведомления
+      setAlertColor('var(--alert-background-error-color)') // Устанавливаем цвет уведомления
       setShowAlert(true); // Отображаем уведомление об ошибке
     }
   };
@@ -252,7 +248,7 @@ const AddPost: React.FC = () => {
       <button onClick={() => navigate("/posts")} className="buttonBack">
         Return to posts
       </button>
-      {showAlert && <Alert text={alertMessage} onClose={handleCloseAlert} />}
+      {showAlert && <Alert text={alertMessage} onClose={handleCloseAlert} color={alertColor}/>}
     </div>
   );
 };

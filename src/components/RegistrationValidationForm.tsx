@@ -29,6 +29,8 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
 
   // Состояния для отображения алерта и отслеживания первичной загрузки
   const [showAlert, setShowAlert] = useState(false);
+  // Состояния для цвета алерта
+  const [alertColor, setAlertColor] = useState("var(--alert-background-error-color)");
 
   // Создание ссылки для фокусировки на элементе ввода
   const focusRef = useRef<HTMLInputElement | null>(null);
@@ -91,6 +93,7 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
         }
       } catch (error) {
         console.error("Validation error:", error);
+        setAlertColor('var(--alert-background-error-color)') // Устанавливаем цвет уведомления
         setShowAlert(true);
       }
     } else if (focusRef.current) {
@@ -154,6 +157,7 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
         <Alert
           text="Please check the entered data"
           onClose={handleCloseAlert}
+          color={alertColor}
         />
       )}
     </div>

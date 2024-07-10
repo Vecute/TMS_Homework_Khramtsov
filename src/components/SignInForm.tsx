@@ -38,6 +38,9 @@ const SignInForm = (props: SignInFormProps) => {
   const [showAlert, setShowAlert] = useState(false);
   const [isInitialRender, setIsInitialRender] = useState(true);
 
+  // Состояния для цвета алерта
+  const [alertColor, setAlertColor] = useState("var(--alert-background-error-color)");
+
   // Создаем ref для хранения ссылки на элемент, который нужно сфокусировать
   const focusRef = useRef<HTMLInputElement | null>(null);
 
@@ -98,7 +101,10 @@ const SignInForm = (props: SignInFormProps) => {
         setRefreshToken(data.refresh); // Устанавливаем refresh_token
         dispatch(setUserMailConfirmation(null)); // Сбрасываем email из состояния Redux
         navigate("/posts"); // Перенаправляем на страницу постов
+        setAlertColor('var(--alert-background-success-color)') // Устанавливаем цвет уведомления
+        setShowAlert(true); // Выводим алерт с приветствием
       } catch (error) {
+        setAlertColor('var(--alert-background-error-color)') // Устанавливаем цвет уведомления
         setShowAlert(true); // Выводим алерт с сообщением об ошибке
       }
     } else if (focusRef.current) {
@@ -106,7 +112,8 @@ const SignInForm = (props: SignInFormProps) => {
     }
   };
 
-  const handleCloseAlert = () => { // Функция для закрытия алерта
+  const handleCloseAlert = () => {
+    // Функция для закрытия алерта
     setShowAlert(false);
   };
 
@@ -165,6 +172,7 @@ const SignInForm = (props: SignInFormProps) => {
         <Alert
           text="Authentication failed: check your credentials"
           onClose={handleCloseAlert}
+          color={alertColor}
         />
       )}
     </div>

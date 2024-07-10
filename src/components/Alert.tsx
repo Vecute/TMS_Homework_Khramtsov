@@ -5,9 +5,10 @@ import "../styles/Alert.scss";
 interface AlertProps {
   text: string;
   onClose: () => void;
+  color?: string;
 }
 
-const Alert: React.FC<AlertProps> = ({ text, onClose }) => {
+const Alert: React.FC<AlertProps> = ({ text, onClose, color }) => {
   // Состояние для отслеживания анимации закрытия
   const [isClosing, setIsClosing] = useState(false);
 
@@ -30,6 +31,7 @@ const Alert: React.FC<AlertProps> = ({ text, onClose }) => {
     <div
       className={`custom-alert ${isClosing ? "hidden" : ""}`}
       onClick={handleClose}
+      style={{ backgroundColor: color }}
     >
       <p>{text}</p>
       <div className="custom-alert__close-button-wrapper">
