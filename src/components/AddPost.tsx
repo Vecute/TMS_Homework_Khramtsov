@@ -32,7 +32,11 @@ const AddPost: React.FC = () => {
   const [showAlert, setShowAlert] = useState(false);
   // Состояние для текста и цвета уведомления
   const [alertMessage, setAlertMessage] = useState("");
-  const [alertColor, setAlertColor] = useState("var(--alert-background-error-color)");
+  const [alertColor, setAlertColor] = useState(
+    "var(--alert-background-error-color)"
+  );
+
+  const MAX_FILE_SIZE = 1 * 1024 * 1024; // Ограничение размера файла 1 МБ
 
   // Обработчик изменения полей формы
   const handleChange = (
@@ -47,13 +51,24 @@ const AddPost: React.FC = () => {
   // Обработчик изменения файла
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null; // Получаем выбранный файл
-    setSelectedFile(file); // Обновляем состояние выбранного файла
-    if (file)
-      setPost((prevPost) => ({
-        ...prevPost,
-        image: file,
-      })); // Обновляем состояние поста с новым файлом
-    else setPost((prevPost) => ({ ...prevPost, image: null })); // Обновляем состояние поста, если файл не выбран
+    if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        // Файл слишком большой
+        setAlertMessage("File size too large. Maximum size is 1MB"); // Устанавливаем текст уведомления
+        setAlertColor("var(--alert-background-error-color)"); // Устанавливаем цвет уведомления
+        setShowAlert(true); // Отображаем уведомление, если файл большего размера
+        handleReset(); // Сбрасываем состояние файла
+        return;
+      } else {
+        setSelectedFile(file); // Обновляем состояние выбранного файла
+        setPost((prevPost) => ({
+          ...prevPost,
+          image: file,
+        })); // Обновляем состояние поста с новым файлом
+      }
+    } else {
+      setPost((prevPost) => ({ ...prevPost, image: null })); // Обновляем состояние поста, если файл не выбран
+    }
   };
 
   // Сброс состояния файла
@@ -96,7 +111,7 @@ const AddPost: React.FC = () => {
     e.preventDefault(); // Предотвращаем стандартное поведение формы
     if (!post.image) {
       setAlertMessage("Please insert a picture"); // Устанавливаем текст уведомления
-      setAlertColor('var(--alert-background-error-color)') // Устанавливаем цвет уведомления
+      setAlertColor("var(--alert-background-error-color)"); // Устанавливаем цвет уведомления
       setShowAlert(true); // Отображаем уведомление, если файл не выбран
       return;
     }
@@ -124,13 +139,13 @@ const AddPost: React.FC = () => {
       const data = await response.json(); // Получаем ответ от сервера
       console.log("Post submitted successfully:", data); // Выводим сообщение об успешной отправке поста
       setAlertMessage("Post sent successfully"); // Устанавливаем текст уведомления
-      setAlertColor('var(--alert-background-success-color)') // Устанавливаем цвет уведомления
+      setAlertColor("var(--alert-background-success-color)"); // Устанавливаем цвет уведомления
       setShowAlert(true); // Отображаем уведомление
-      handleDeleteClick() // Очищаем все поля
+      handleDeleteClick(); // Очищаем все поля
     } catch (error) {
       console.error("Error submitting post:", error); // Выводим сообщение об ошибке в консоль
       setAlertMessage("Error loading the post"); // Устанавливаем текст уведомления
-      setAlertColor('var(--alert-background-error-color)') // Устанавливаем цвет уведомления
+      setAlertColor("var(--alert-background-error-color)"); // Устанавливаем цвет уведомления
       setShowAlert(true); // Отображаем уведомление об ошибке
     }
   };
@@ -177,7 +192,7 @@ const AddPost: React.FC = () => {
           <div className="addPost__image-wrapper">
             <input
               type="file"
-              accept="image/png, image/jpeg"
+              accept=".jpg, .jpeg, .png"
               onChange={handleFileChange}
               className="addPost__input-image"
             />
@@ -248,7 +263,13 @@ const AddPost: React.FC = () => {
       <button onClick={() => navigate("/posts")} className="buttonBack">
         Return to posts
       </button>
-      {showAlert && <Alert text={alertMessage} onClose={handleCloseAlert} color={alertColor}/>}
+      {showAlert && (
+        <Alert
+          text={alertMessage}
+          onClose={handleCloseAlert}
+          color={alertColor}
+        />
+      )}
     </div>
   );
 };
