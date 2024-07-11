@@ -69,6 +69,7 @@ export const myPostsSlice = createSlice({
         state.loading = false; // Сбрасываем флаг загрузки
         // Устанавливаем сообщение об ошибке, используя action.error.message или дефолтное сообщение
         state.error = action.error.message || "Unknown error occurred."; 
+        deleteMyPostsToLocalStorage()
       });
   },
 });
