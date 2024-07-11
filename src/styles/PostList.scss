@@ -44,6 +44,12 @@
     }
   }
 
+  &__image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   &__icons {
     cursor: pointer;
     width: 20px;
@@ -131,8 +137,9 @@
     box-shadow: 0 0 8px 0 var(--shadow-color);
     transition: 0.3s;
     display: grid;
-    grid-template-rows: auto 1fr auto auto;
+    grid-template-rows: 1fr auto auto auto;
     transition: all 0.3s linear;
+    align-items: center;
 
     & .post-card__description {
       display: none;
@@ -164,11 +171,11 @@
     }
 
     & img {
-      width: 100%;
+      width: auto;
       height: auto;
+      max-width: 100%;
+      max-height: 200px;
       object-fit: contain;
-      max-height: 250px;
-      margin-bottom: 5px;
       border-radius: 5px;
     }
 
