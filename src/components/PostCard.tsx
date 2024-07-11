@@ -129,26 +129,24 @@ export const PostCard = ({
       id={id.toString()}
       onClick={handleClick}
     >
-      {image && (
-        <div className="post__image-container">
-          {isLoading && (
-            <div className="post-spinner">
-              <div className="post-spinner__circle"></div>
-            </div>
-          )}
-          <img
-            src={image}
-            alt={title}
-            onClick={onImageClick}
-            className={`post__image ${isLoading ? "hidden" : ""}`}
-            onLoad={() => setIsLoading(false)}
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = "/fallback.png";
-              setIsLoading(false);
-            }}
-          />
-        </div>
-      )}
+      <div className="post__image-container">
+        {isLoading && (
+          <div className="post-spinner">
+            <div className="post-spinner__circle"></div>
+          </div>
+        )}
+        <img
+          src={image || "/fallback.png"}
+          alt={title}
+          onClick={onImageClick}
+          className={`post__image ${isLoading ? "hidden" : ""}`}
+          onLoad={() => setIsLoading(false)}
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "/fallback.png";
+            setIsLoading(false);
+          }}
+        />
+      </div>
       <h2>{title}</h2>
       <p className="post-card__description">{description || text}</p>
       <p className="post-card__date">{date}</p>
