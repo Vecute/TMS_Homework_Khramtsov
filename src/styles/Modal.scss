@@ -49,10 +49,6 @@
     margin: 0 auto;
   }
 
-  & .post-card {
-    margin: auto;
-  }
-
   &__button {
     width: inherit;
     width: 20px;
@@ -107,6 +103,7 @@
     max-height: calc(100dvh - 90px);
     display: grid;
     grid-template-rows: minmax(10%, 1fr) auto auto auto auto;
+    height: 100%;
 
     & .post-card__options {
       display: none;
