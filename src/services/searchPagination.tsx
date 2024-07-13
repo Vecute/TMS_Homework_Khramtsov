@@ -11,6 +11,7 @@ const searchPagination: React.FC<PaginationProps> = ({
   currentPage,
   onPageChange,
 }) => {
+  
   // Функция для рендеринга номеров страниц
   const renderPageNumbers = () => {
     // Массив для хранения элементов списка номеров страниц
