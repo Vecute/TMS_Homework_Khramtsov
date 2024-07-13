@@ -34,6 +34,7 @@
     box-shadow: 0 0 8px 0 var(--shadow-color);
     font-size: 40px;
     grid-column: span 8;
+    text-align: center;
 
     @media only screen and (max-width: 430px) {
       font-size: 30px;
