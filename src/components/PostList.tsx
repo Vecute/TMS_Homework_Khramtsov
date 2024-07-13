@@ -49,9 +49,10 @@ const PostList = () => {
 
   return (
     <div>
-      <PostsLoader loading={loading} error={error} /> {/* Отображаем лоадер или сообщение об ошибке */}
+      <PostsLoader loading={loading} error={error} />{" "}
+      {/* Отображаем лоадер или сообщение об ошибке */}
       {/* Отображаем кнопки переключения вкладок */}
-      <div className="post__tab-line"> 
+      <div className="post__tab-line">
         <button
           onClick={() => setActiveTab("all")}
           className={`post__tab ${activeTab === "all" ? "selected" : ""}`}
@@ -60,17 +61,15 @@ const PostList = () => {
         </button>
         <button
           onClick={() => setActiveTab("favorites")}
-          className={`post__tab ${
-            activeTab === "favorites" ? "selected" : ""
-          }`}
+          className={`post__tab ${activeTab === "favorites" ? "selected" : ""}`}
         >
           Favorites
         </button>
       </div>
       {/* Отображаем список постов */}
-      <div className="post-list"> 
+      <div className="post-list">
         {/* Если активна вкладка "All", то отображаем все посты */}
-        {activeTab === "all" ? ( 
+        {activeTab === "all" ? (
           <>
             {posts.length > 0 ? (
               posts.map((post) => <PostCard key={post.id} {...post} />)
@@ -96,15 +95,18 @@ const PostList = () => {
       {showPaginationAndSelector && (
         <div className="pagination__container">
           <Pagination />
-          <select
-            onChange={handlePostsPerPageChange}
-            className="posts-per-page"
-            value={postsPerPage}
-          >
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-          </select>
+          <div>
+          <span className="pagination__label">Posts per page: </span>
+            <select
+              onChange={handlePostsPerPageChange}
+              className="posts-per-page"
+              value={postsPerPage}
+            >
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select>
+          </div>
         </div>
       )}
     </div>

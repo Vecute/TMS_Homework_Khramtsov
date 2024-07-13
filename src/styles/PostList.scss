@@ -412,6 +412,11 @@
   margin-bottom: 10px;
   font-size: 16px;
 
+  &__label {
+    font-size: 16px;
+    color: var(--font-color);
+  }
+
   &__container {
     display: flex;
     flex-direction: column;
