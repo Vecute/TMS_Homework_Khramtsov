@@ -175,6 +175,7 @@
     & img {
       max-width: 100%;
       max-height: 200px;
+      -webkit-object-fit:contain;
       object-fit: contain;
       border-radius: 5px;
     }
