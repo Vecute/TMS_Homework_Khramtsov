@@ -91,8 +91,8 @@ const PostList = () => {
         )}
         <PostModal /> {/* Отображаем модальное окно для просмотра поста */}
       </div>
-      {/* Отображаем пагинацию и селектор количества постов на странице только на вкладке "All" */}
-      {showPaginationAndSelector && (
+      {/* Отображаем пагинацию и селектор количества постов на странице только на вкладке "All" и если есть найденные пост*/}
+      {showPaginationAndSelector && (posts.length > 0) && (
         <div className="pagination__container">
           <Pagination />
           <div>
