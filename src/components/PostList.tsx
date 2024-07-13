@@ -1,62 +1,112 @@
-import '../styles/PostList.scss';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { PostCard } from './PostCard';
-import { PostModal } from './PostModal';
-import { RootState } from '../redux/store';
-import PostsLoader from './PostsLoader';
+import "../styles/PostList.scss";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { PostCard, PostProps } from "./PostCard";
+import { PostModal } from "./PostModal";
+import { RootState, useAppDispatch } from "../redux/store";
+import PostsLoader from "./PostsLoader";
+import { fetchAllPosts } from "../thunk/fetchAllPosts";
+import { setPostsPerPage, updateCurrentPagePosts } from "../redux/postsReducer";
+import Pagination from "../services/pagination";
 
 const PostList = () => {
-  // Создаем состояние activeTab с помощью useState и устанавливаем начальное значение "all"
+  // Определяем состояние activeTab для хранения активной вкладки ("all" или "favorites")
   const [activeTab, setActiveTab] = useState<"all" | "favorites">("all");
+  // Получаем dispatch-функцию для отправки действий в хранилище Redux
+  const dispatch = useAppDispatch();
 
-  // Получаем все посты из хранилища Redux с помощью useSelector
-  const posts = useSelector((state: RootState) => state.postsReducer.posts);
+  // Получаем данные из хранилища Redux с помощью useSelector
+  const { posts, loading, error, postsPerPage } = useSelector(
+    (state: RootState) => state.postsReducer
+  );
+  // Получаем список постов, добавленных в избранное
+  const favoritePosts = useSelector((state: RootState) => {
+    const favorites = state.favoritesReducer;
+    return state.postsReducer.allPosts.filter((post) => favorites[post.id]);
+  });
 
-  // Получаем объект favorites из хранилища Redux
-  const favorites = useSelector((state: RootState) => state.favoritesReducer);
+  // Флаг для отображения пагинации и селектора количества постов на странице
+  const showPaginationAndSelector = activeTab === "all";
 
-  // Фильтруем посты в зависимости от значения activeTab
-  const filteredPosts = activeTab === "favorites" ? posts.filter((post) => favorites[post.id]) : posts;
-
+  // Эффект для загрузки всех постов при монтировании компонента
   useEffect(() => {
-    // Прокручиваем страницу в начало (0, 0)
-    window.scrollTo(0, 0);
-  }, []);
+    dispatch(fetchAllPosts());
+  }, [dispatch]);
+
+  // Эффект для обновления списка постов на текущей странице при изменении активной вкладки или количества постов на странице
+  useEffect(() => {
+    if (activeTab === "all") {
+      dispatch(updateCurrentPagePosts());
+    }
+  }, [dispatch, activeTab, postsPerPage]);
+
+  // Обработчик изменения количества постов на странице
+  const handlePostsPerPageChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    dispatch(setPostsPerPage(Number(e.target.value)));
+  };
 
   return (
     <div>
-      <PostsLoader />
-      <div className='post__tab-line'>
+      <PostsLoader loading={loading} error={error} /> {/* Отображаем лоадер или сообщение об ошибке */}
+      {/* Отображаем кнопки переключения вкладок */}
+      <div className="post__tab-line"> 
         <button
-          onClick={() => setActiveTab("all")} // При клике устанавливаем activeTab в "all"
-          className={`post__tab ${activeTab === "all" ? "selected" : ""}`} // Динамически добавляем класс "selected", если activeTab равен "all"
+          onClick={() => setActiveTab("all")}
+          className={`post__tab ${activeTab === "all" ? "selected" : ""}`}
         >
           All
         </button>
-
         <button
-          onClick={() => setActiveTab("favorites")} // При клике устанавливаем activeTab в "favorites"
-          className={`post__tab ${activeTab === "favorites" ? "selected" : ""}`} // Динамически добавляем класс "selected", если activeTab равен "favorites"
+          onClick={() => setActiveTab("favorites")}
+          className={`post__tab ${
+            activeTab === "favorites" ? "selected" : ""
+          }`}
         >
           Favorites
         </button>
       </div>
-      <div className="post-list">
-        {/* Проверяем, есть ли отфильтрованные посты */}
-        {filteredPosts.length > 0 ? (
-          // Если есть, то для каждого поста рендерим компонент PostCard
-          filteredPosts.map((post) => (
-            <PostCard
-              key={post.id} // Устанавливаем ключ для каждого элемента списка
-              {...post} // Передаем все свойства поста в компонент PostCard как пропсы
-            />
-          ))
+      {/* Отображаем список постов */}
+      <div className="post-list"> 
+        {/* Если активна вкладка "All", то отображаем все посты */}
+        {activeTab === "all" ? ( 
+          <>
+            {posts.length > 0 ? (
+              posts.map((post) => <PostCard key={post.id} {...post} />)
+            ) : (
+              <div className="post__empty">There are no posts 😭</div>
+            )}
+          </>
         ) : (
-          <div className="post__empty">There are no posts 😭</div>
+          // Иначе отображаем посты, добавленные в избранное
+          <>
+            {favoritePosts.length > 0 ? (
+              favoritePosts.map((post: PostProps) => (
+                <PostCard key={post.id} {...post} />
+              ))
+            ) : (
+              <div className="post__empty">There are no favorite posts 😭</div>
+            )}
+          </>
         )}
-        <PostModal />
+        <PostModal /> {/* Отображаем модальное окно для просмотра поста */}
       </div>
+      {/* Отображаем пагинацию и селектор количества постов на странице только на вкладке "All" */}
+      {showPaginationAndSelector && (
+        <div className="pagination__container">
+          <Pagination />
+          <select
+            onChange={handlePostsPerPageChange}
+            className="posts-per-page"
+            value={postsPerPage}
+          >
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+      )}
     </div>
   );
 };

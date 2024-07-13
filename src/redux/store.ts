@@ -10,6 +10,7 @@ import myPostsReducer from "./myPostsReducer";
 import userMailConfirmationReducer from "./userMailConfirmationReducer";
 import { useDispatch } from "react-redux";
 import { thunk } from "redux-thunk";
+import singlePostReducer from "./singlePostReducer";
 
 // Создание главного редюсера путем объединения редюсеров с помощью функции combineReducers
 const combineReducer = combineReducers({
@@ -22,6 +23,7 @@ const combineReducer = combineReducers({
         postsReducer,                // Редюсер для постов
         myPostsReducer,              // Редюсер для постов авторизованного пользователя
         userMailConfirmationReducer, // Редюсер для подтверждения почты
+        singlePostReducer,           // Редюсер для одного поста
     }
 )
 

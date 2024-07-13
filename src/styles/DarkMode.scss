@@ -22,7 +22,7 @@
   --icon-accent-color: #ffc10a;
   --button-font-color: #ffffff;
   --button-background-color: #6495ed;
-  --button-border-color: #333333;
+  --button-border-color: #cccccc;
   --button-font-hover-color: #444444;
   --button-background-hover-color: #eeeeee;
   --button-border-hover-color: #333333;
@@ -37,6 +37,8 @@
   --error-color: #ff0000;
   --shadow-color: #00000033;
   --border-color: #eeeeee;
+  --pagination-border-color: #cccccc;
+  --pagination-accent-color: #6495ed;
   --spinner-circle-color: #333333;
   --spinner-highlighter: #6495ed;
   --add-post-input-background: #ffffff;
@@ -76,7 +78,7 @@
   --icon-hover-color: #88afff;
   --button-font-color: #eeeeee;
   --button-background-color: #4a79c2;
-  --button-border-color: #6495ed;
+  --button-border-color: #cccccc;
   --button-font-hover-color: #eeeeee;
   --button-background-hover-color: #000000;
   --button-border-hover-color: #6495ed;
@@ -90,6 +92,7 @@
   --input-background-color: #eeeeee;
   --shadow-color: #8680804d;
   --border-color: #333333;
+  --pagination-border-color: #cccccc;
   --spinner-circle-color: #eeeeee;
   --cancel-button-font-color: #eeeeee;
   --cancel-button-border-color: #eeeeee;

@@ -2,25 +2,22 @@ import "../styles/PostList.scss";
 import TemplatePage from "./TemplatePage";
 import { PostCard } from "../components/PostCard";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { setSelectedImage } from "../redux/imagePopUpReducer";
 import { ImageModal } from "../components/ImageModal";
-import { RootState } from "../redux/store";
+import { RootState, useAppDispatch } from "../redux/store";
 import { useEffect } from "react";
+import { fetchPostById } from "../thunk/fetchPostById";
 
 const PostPage = () => {
-  // Получение параметра postId из URL с помощью useParams
   const { postId } = useParams();
-
-  // Инициализация хука useNavigate для получения функции navigate
   const navigate = useNavigate();
-  // Инициализация хука useDispatch для получения функции dispatch
-  const dispatch = useDispatch();
-  // Получение всех постов из хранилища Redux с помощью useSelector
-  const posts = useSelector((state: RootState) => state.postsReducer.posts);
+  const dispatch = useAppDispatch();
 
-  // Поиск поста с ID, равным postId, в массиве posts
-  const post = posts.find((p) => p.id === parseInt(postId!, 10));
+  // Получаем данные из singlePostReducer
+  const { post, loading, error } = useSelector(
+    (state: RootState) => state.singlePostReducer
+  );
 
   // Обработчик события клика по изображению
   const handleOpenImagePopUp = () => {
@@ -40,13 +37,14 @@ const PostPage = () => {
   };
 
   useEffect(() => {
-    // Прокручиваем страницу в начало (0, 0)
     window.scrollTo(0, 0);
-  }, []);
 
-  // Условная отрисовка в зависимости от состояния загрузки и найденного поста
-  if (!posts.length) {
-    // Отображаем сообщение о загрузке
+    // Загружаем пост по ID
+    dispatch(fetchPostById(parseInt(postId!, 10)));
+  }, [dispatch, postId]); 
+
+  // Отображение состояния загрузки или ошибки
+  if (loading) {
     return (
       <div className="post__loading">
         <div className="spinner"></div>
@@ -54,37 +52,41 @@ const PostPage = () => {
     );
   }
 
-  // Если пост не найден (post === undefined)...
-  if (!post) {
-    // ...то отображаем сообщение об ошибке
+  if (error) {
+    return <div className="post__error">Error loading post: {error}</div>;
+  }
+
+  // Отображение поста, если он загружен
+  if (post) {
     return (
-      <div className="empty-post">
-        <div className="post-empty">No posts found 😭</div>
-        <button onClick={() => navigate("/posts")} className="buttonBack">
-          Return to posts
-        </button>
-      </div>
+      <TemplatePage title={post.title}>
+        <div className="post-single">
+          <PostCard
+            description={post.description || (post.text || "")}
+            id={post.id}
+            date={post.date}
+            title={post.title}
+            image={post.image}
+            key={post.id}
+            onImageClick={handleOpenImagePopUp}
+          />
+          <button onClick={() => navigate("/posts")} className="buttonBack">
+            Return to posts
+          </button>
+        </div>
+        <ImageModal />
+      </TemplatePage>
     );
   }
 
+  // Отображение сообщения, если пост не найден
   return (
-    <TemplatePage title={post.title}>
-      <div className="post-single">
-        <PostCard
-          description={post.description || (post.text || '')}
-          id={post.id}
-          date={post.date}
-          title={post.title}
-          image={post.image}
-          key={post.id}
-          onImageClick={handleOpenImagePopUp}
-        />
-        <button onClick={() => navigate("/posts")} className="buttonBack">
-          Return to posts
-        </button>
-      </div>
-      <ImageModal />
-    </TemplatePage>
+    <div className="empty-post">
+      <div className="post-empty">No posts found 😭</div>
+      <button onClick={() => navigate("/posts")} className="buttonBack">
+        Return to posts
+      </button>
+    </div>
   );
 };
 
