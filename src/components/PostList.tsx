@@ -6,7 +6,11 @@ import { PostModal } from "./PostModal";
 import { RootState, useAppDispatch } from "../redux/store";
 import PostsLoader from "./PostsLoader";
 import { fetchAllPosts } from "../thunk/fetchAllPosts";
-import { setPostsPerPage, updateCurrentPagePosts } from "../redux/postsReducer";
+import {
+  setCurrentPage,
+  setPostsPerPage,
+  updateCurrentPagePosts,
+} from "../redux/postsReducer";
 import Pagination from "../services/pagination";
 
 const PostList = () => {
@@ -16,7 +20,7 @@ const PostList = () => {
   const dispatch = useAppDispatch();
 
   // Получаем данные из хранилища Redux с помощью useSelector
-  const { posts, loading, error, postsPerPage } = useSelector(
+  const { posts, loading, error, postsPerPage, currentPage } = useSelector(
     (state: RootState) => state.postsReducer
   );
   // Получаем список постов, добавленных в избранное
@@ -28,17 +32,27 @@ const PostList = () => {
   // Флаг для отображения пагинации и селектора количества постов на странице
   const showPaginationAndSelector = activeTab === "all";
 
-  // Эффект для загрузки всех постов при монтировании компонента
+  // useEffect для загрузки всех постов при монтировании компонента и при каждом изменении dispatch
   useEffect(() => {
-    dispatch(fetchAllPosts());
+    const storedCurrentPage = localStorage.getItem("currentPage");
+
+    dispatch(fetchAllPosts()).then(() => {
+      // После успешной загрузки постов проверяем, есть ли сохраненная страница в localStorage
+      if (storedCurrentPage) {
+        // Если есть, устанавливаем ее в хранилище Redux
+        dispatch(setCurrentPage(Number(storedCurrentPage)));
+      }
+      // Обновляем список постов на текущей странице
+      dispatch(updateCurrentPagePosts());
+    });
   }, [dispatch]);
 
-  // Эффект для обновления списка постов на текущей странице при изменении активной вкладки или количества постов на странице
+  // Эффект для обновления списка постов на текущей странице при изменениях на странице
   useEffect(() => {
     if (activeTab === "all") {
       dispatch(updateCurrentPagePosts());
     }
-  }, [dispatch, activeTab, postsPerPage]);
+  }, [dispatch, activeTab, postsPerPage, currentPage]);
 
   // Обработчик изменения количества постов на странице
   const handlePostsPerPageChange = (
@@ -92,11 +106,11 @@ const PostList = () => {
         <PostModal /> {/* Отображаем модальное окно для просмотра поста */}
       </div>
       {/* Отображаем пагинацию и селектор количества постов на странице только на вкладке "All" и если есть найденные пост*/}
-      {showPaginationAndSelector && (posts.length > 0) && (
+      {showPaginationAndSelector && posts.length > 0 && (
         <div className="pagination__container">
           <Pagination />
           <div>
-          <span className="pagination__label">Posts per page: </span>
+            <span className="pagination__label">Posts per page: </span>
             <select
               onChange={handlePostsPerPageChange}
               className="posts-per-page"

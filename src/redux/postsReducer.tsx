@@ -26,7 +26,7 @@ const saveToLocalStorage = (key: string, value: any) => {
 const initialState: PostsState = {
   allPosts: getFromLocalStorage("allPosts", []), // Пытаемся получить все посты из localStorage, если их нет - пустой массив
   posts: [], // Изначально нет постов для отображения
-  currentPage: 1, // Текущая страница - 1
+  currentPage: getFromLocalStorage("currentPage", 1), // Получаем currentPage из localStorage
   postsPerPage: getFromLocalStorage("postsPerPage", 20), // Пытаемся получить количество постов на странице из localStorage, по умолчанию - 20
   loading: false, // Данные не загружаются
   error: null, // Нет ошибки
@@ -40,6 +40,7 @@ const postsSlice = createSlice({
     // Синхронные редюсеры
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload; // Обновляем номер текущей страницы
+      saveToLocalStorage("currentPage", action.payload); // Сохраняем currentPage в localStorage
     },
     setPostsPerPage: (state, action) => {
       state.postsPerPage = action.payload; // Обновляем количество постов на странице
