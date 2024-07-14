@@ -45,6 +45,7 @@ const postsSlice = createSlice({
     setPostsPerPage: (state, action) => {
       state.postsPerPage = action.payload; // Обновляем количество постов на странице
       state.currentPage = 1; // Сбрасываем текущую страницу на 1
+      saveToLocalStorage("currentPage", 1); // Сохраняем currentPage в localStorage
       saveToLocalStorage("postsPerPage", action.payload); // Сохраняем новое количество постов на страницу в localStorage
     },
     updateCurrentPagePosts: (state) => {
