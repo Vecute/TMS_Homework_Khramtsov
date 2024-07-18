@@ -28,6 +28,8 @@ const AddPost: React.FC = () => {
   const http = useHttp();
   // Состояние для выбранного файла
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // Состояние для превью картинки
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   // Состояние для отображения уведомления
   const [showAlert, setShowAlert] = useState(false);
   // Состояние для текста и цвета уведомления
@@ -65,9 +67,16 @@ const AddPost: React.FC = () => {
           ...prevPost,
           image: file,
         })); // Обновляем состояние поста с новым файлом
+        // Создаем URL предпросмотра
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPreviewUrl(reader.result as string);
+        };
+        reader.readAsDataURL(file);
       }
     } else {
       setPost((prevPost) => ({ ...prevPost, image: null })); // Обновляем состояние поста, если файл не выбран
+      setPreviewUrl(null); // Сбрасываем предпросмотр, если файл не выбран
     }
   };
 
@@ -75,6 +84,7 @@ const AddPost: React.FC = () => {
   const handleReset = () => {
     setSelectedFile(null); // Сбрасываем состояние выбранного файла
     setPost((prevPost) => ({ ...prevPost, image: null })); // Сбрасываем состояние поста
+    setPreviewUrl(null); // Сбрасываем предпросмотр
     const fileInput = document.querySelector(
       'input[type="file"]'
     ) as HTMLInputElement;
@@ -196,6 +206,15 @@ const AddPost: React.FC = () => {
               onChange={handleFileChange}
               className="addPost__input-image"
             />
+            {previewUrl && (
+              <div className="addPost__image-preview-wrapper">
+                <img
+                  className="addPost__image-preview"
+                  src={previewUrl}
+                  alt="Preview"
+                />
+              </div>
+            )}
             {selectedFile && (
               <input
                 type="reset"
@@ -206,6 +225,7 @@ const AddPost: React.FC = () => {
             )}
           </div>
         </div>
+
         <div className="addPost__element">
           <label htmlFor="description" className="addPost__label">
             Description
