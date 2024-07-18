@@ -77,6 +77,7 @@ const AddPost: React.FC = () => {
     } else {
       setPost((prevPost) => ({ ...prevPost, image: null })); // Обновляем состояние поста, если файл не выбран
       setPreviewUrl(null); // Сбрасываем предпросмотр, если файл не выбран
+      setSelectedFile(null); // Сбрасываем состояние выбранного файла
     }
   };
 
@@ -125,7 +126,6 @@ const AddPost: React.FC = () => {
       setShowAlert(true); // Отображаем уведомление, если файл не выбран
       return;
     }
-    console.log(post); // Выводим состояние поста в консоль
     try {
       const formData = new FormData(); // Создаем FormData для отправки файла
       formData.append("title", post.title);
@@ -147,7 +147,6 @@ const AddPost: React.FC = () => {
       }
 
       const data = await response.json(); // Получаем ответ от сервера
-      console.log("Post submitted successfully:", data); // Выводим сообщение об успешной отправке поста
       setAlertMessage("Post sent successfully"); // Устанавливаем текст уведомления
       setAlertColor("var(--alert-background-success-color)"); // Устанавливаем цвет уведомления
       setShowAlert(true); // Отображаем уведомление
