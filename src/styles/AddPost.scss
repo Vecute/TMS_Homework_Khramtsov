@@ -167,3 +167,6 @@ input[type="file"]::file-selector-button {
     cursor: pointer;
   }
 }
+[type="file"]::-webkit-file-upload-button::-webkit-file-upload-dummy {
+  display: none;
+}
