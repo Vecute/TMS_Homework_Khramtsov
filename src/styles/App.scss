@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "PT Sans", sans-serif;
+  font-style: normal;
+  caret-color: var(--caret-color);
+}
+
+.App {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 0px 0px;
+  height: 100vh;
+  position: relative;
+
+}
+
+.main-container {
+  max-width: 1500px;
+  padding: 0 15px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.buttonBack {
+  color: var(--button-font-color);
+  background-color: var(--button-background-color);
+  border: 1px solid var(--button-border-color);
+  box-shadow: 0 0 8px 0 var(--shadow-color);
+  border-radius: 4px;
+  padding: 7px;
+  transition: all 0.3s linear;
+  margin-bottom: 10px;
+  @media (hover: hover) {
+    &:hover {
+      color: var(--button-font-hover-color);
+      background-color: var(--button-background-hover-color);
+      border: 1px solid var(--button-border-hover-color);
+      cursor: pointer;
+    }
+  }
+}
+
+.buttons {
+  display: flex;
+}
