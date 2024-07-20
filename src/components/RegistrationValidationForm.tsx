@@ -21,16 +21,18 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
   const uid = useInput("");
   const token = useInput("");
 
-  // Массив с полями ввода
-  const inputs = [uid, token];
+  // Состояние для хранения сообщений об ошибках
+  const [errors, setErrors] = useState({ uid: "", token: "" });
 
   // Хук для навигации по маршрутам
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   // Состояния для отображения алерта и отслеживания первичной загрузки
   const [showAlert, setShowAlert] = useState(false);
   // Состояния для цвета алерта
-  const [alertColor, setAlertColor] = useState("var(--alert-background-error-color)");
+  const [alertColor, setAlertColor] = useState(
+    "var(--alert-background-error-color)"
+  );
 
   // Создание ссылки для фокусировки на элементе ввода
   const focusRef = useRef<HTMLInputElement | null>(null);
@@ -51,20 +53,38 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Предотвращение стандартного поведения формы
 
+    // Сбрасываем сообщения об ошибках
+    setErrors({ uid: "", token: "" });
+
     let isValid = true; // Переменная для проверки валидности формы
     focusRef.current = null; // Сброс ссылки на элемент для фокусировки
 
-    // Проверка каждого поля ввода на пустоту
-    for (const input of inputs) {
-      if (input.value === "") {
-        input.setIsValid(false); // Установка состояния валидности в false
-        isValid = false; // Установка валидности формы в false
-        if (!focusRef.current) {
-          focusRef.current = input.ref.current; // Установка ссылки на первое невалидное поле ввода
-        }
-      } else {
-        input.setIsValid(true); // Установка состояния валидности в true
+    // Валидация uid
+    if (uid.value.trim() === "") { // Проверяем, пустое ли поле uid после удаления пробелов с начала и конца строки
+      setErrors((prevErrors) => ({
+        ...prevErrors, // Сохраняем предыдущие ошибки
+        uid: "UID is required", // Устанавливаем сообщение об ошибке для uid
+      }));
+      uid.setIsValid(false); // Устанавливаем состояние валидности uid в false
+      isValid = false; // Помечаем форму как невалидную
+      focusRef.current = uid.ref.current; // Устанавливаем фокус на поле uid
+    } else {
+      uid.setIsValid(true); // Если uid валидный, устанавливаем состояние валидности в true
+    }
+
+    // Валидация token
+    if (token.value.trim() === "") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        token: "Token is required",
+      }));
+      token.setIsValid(false);
+      isValid = false;
+      if (!focusRef.current) {  // Если фокус еще не установлен (т.е. поле uid было валидным),
+        focusRef.current = token.ref.current; // устанавливаем фокус на поле token
       }
+    } else {
+      token.setIsValid(true);
     }
 
     // Если форма валидна, выводим значения полей ввода и переходим на страницу подтверждения регистрации
@@ -93,7 +113,7 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
         }
       } catch (error) {
         console.error("Validation error:", error);
-        setAlertColor('var(--alert-background-error-color)') // Устанавливаем цвет уведомления
+        setAlertColor("var(--alert-background-error-color)"); // Устанавливаем цвет уведомления
         setShowAlert(true);
       }
     } else if (focusRef.current) {
@@ -101,7 +121,8 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
     }
   };
 
-  const handleCloseAlert = () => { // Функция для закрытия алерта
+  const handleCloseAlert = () => {
+    // Функция для закрытия алерта
     setShowAlert(false);
   };
 
@@ -129,6 +150,7 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
               !uid.isValid ? "invalid" : ""
             }`}
           />
+          {errors.uid && <div className="error-message">{errors.uid}</div>}
         </div>
         <div className="registrationValidationForm__input-container">
           <label htmlFor="token" className="registrationValidationForm__label">
@@ -145,6 +167,7 @@ const RegistrationValidationForm = (props: RegistrationValidationFormProps) => {
               !token.isValid ? "invalid" : ""
             }`}
           />
+          {errors.token && <div className="error-message">{errors.token}</div>}
         </div>
         <button type="submit" className="registration__button">
           I entered the data to confirm the registration

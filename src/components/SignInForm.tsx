@@ -24,9 +24,6 @@ const SignInForm = (props: SignInFormProps) => {
   const email = useInput(userEmail ?? "");
   const password = useInput("");
 
-  // Создаем массив из полей ввода
-  const inputs = [email, password]; // Создаем массив из полей ввода
-
   // Хуки для навигации и dispatch
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -38,8 +35,13 @@ const SignInForm = (props: SignInFormProps) => {
   const [showAlert, setShowAlert] = useState(false);
   const [isInitialRender, setIsInitialRender] = useState(true);
 
+  // Состояние для хранения сообщений об ошибках
+  const [errors, setErrors] = useState({ email: "", password: "" });
+
   // Состояния для цвета алерта
-  const [alertColor, setAlertColor] = useState("var(--alert-background-error-color)");
+  const [alertColor, setAlertColor] = useState(
+    "var(--alert-background-error-color)"
+  );
 
   // Создаем ref для хранения ссылки на элемент, который нужно сфокусировать
   const focusRef = useRef<HTMLInputElement | null>(null);
@@ -60,23 +62,56 @@ const SignInForm = (props: SignInFormProps) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Отменяем стандартное поведение формы при отправке, чтобы страница не перезагружалась
 
+    // Сбрасываем сообщения об ошибках
+    setErrors({ email: "", password: "" });
+
     let isValid = true; // Переменная для отслеживания валидности всех полей формы
     focusRef.current = null; // Сбрасываем ссылку на элемент, который нужно будет сфокусировать
 
-    for (const input of inputs) {
-      // Проходим по каждому полю ввода в форме
-      if (input.value === "") {
-        // Если поле ввода пустое...
-        input.setIsValid(false); // ...то устанавливаем его состояние как невалидное...
-        isValid = false; // ...и общее состояние валидности формы делаем невалидным
-        if (!focusRef.current) {
-          // Если еще не установлена ссылка на элемент для фокуса...
-          focusRef.current = input.ref.current; // ...то устанавливаем ее на текущее поле ввода
-        }
-      } else {
-        // Если поле ввода не пустое...
-        input.setIsValid(true); // ...то устанавливаем его состояние как валидное
+    // Валидация email
+    if (email.value === "") {
+      setErrors((prevErrors) => ({ // Если поле email пустое:
+        ...prevErrors, // Сохраняем предыдущие ошибки
+        email: "Email is required", // Устанавливаем сообщение об ошибке для email
+      }));
+      isValid = false; // Помечаем форму как невалидную
+      email.setIsValid(false) // Устанавливаем состояние валидности email в false
+      focusRef.current = email.ref.current; // Устанавливаем фокус на поле email
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {// Если email не соответствует регулярному выражению:
+      setErrors((prevErrors) => ({
+        ...prevErrors, // Сохраняем предыдущие ошибки
+        email: "Invalid email format", // Устанавливаем сообщение об ошибке для email
+      }));
+      isValid = false; // Помечаем форму как невалидную
+      email.setIsValid(false) // Устанавливаем состояние валидности email в false
+      focusRef.current = email.ref.current; // Устанавливаем фокус на поле email
+    } else { // Если email валидный:
+      email.setIsValid(true) // Устанавливаем состояние валидности email в true
+    }
+
+    // Валидация пароля
+    if (password.value === "") { // Если поле пароля пустое:
+      setErrors((prevErrors) => ({
+        ...prevErrors, // Сохраняем предыдущие ошибки
+        password: "Password is required", // Устанавливаем сообщение об ошибке для пароля
+      }));
+      password.setIsValid(false); // Устанавливаем состояние валидности пароля в false
+      isValid = false; // Помечаем форму как невалидную
+      if (!focusRef.current) { // Если фокус еще не установлен ни на одно поле:
+        focusRef.current = password.ref.current; // Устанавливаем фокус на поле пароля
       }
+    } else if (password.value.length < 8) { // Если длина пароля меньше 8 символов:
+      setErrors((prevErrors) => ({
+        ...prevErrors, // Сохраняем предыдущие ошибки
+        password: "Password must be at least 8 characters long", // Устанавливаем сообщение об ошибке для пароля
+      }));
+      isValid = false; // Помечаем форму как невалидную
+      password.setIsValid(false); // Устанавливаем состояние валидности пароля в false
+      if (!focusRef.current) {// Если фокус еще не установлен ни на одно поле:
+        focusRef.current = password.ref.current; // Устанавливаем фокус на поле пароля
+      }
+    } else { // Если пароль валидный:
+      password.setIsValid(true) // Устанавливаем состояние валидности пароля в true
     }
 
     if (isValid) {
@@ -101,10 +136,8 @@ const SignInForm = (props: SignInFormProps) => {
         setRefreshToken(data.refresh); // Устанавливаем refresh_token
         dispatch(setUserMailConfirmation(null)); // Сбрасываем email из состояния Redux
         navigate("/posts"); // Перенаправляем на страницу постов
-        setAlertColor('var(--alert-background-success-color)') // Устанавливаем цвет уведомления
-        setShowAlert(true); // Выводим алерт с приветствием
       } catch (error) {
-        setAlertColor('var(--alert-background-error-color)') // Устанавливаем цвет уведомления
+        setAlertColor("var(--alert-background-error-color)"); // Устанавливаем цвет уведомления
         setShowAlert(true); // Выводим алерт с сообщением об ошибке
       }
     } else if (focusRef.current) {
@@ -134,7 +167,9 @@ const SignInForm = (props: SignInFormProps) => {
             className={`signInForm__input ${!email.isValid ? "invalid" : ""}`}
             autoComplete="username"
           />
+          {errors.email && <div className="error-message">{errors.email}</div>}
         </div>
+        
         <div className="signInForm__input-container">
           <label htmlFor="password" className="signInForm__label">
             Password
@@ -151,6 +186,9 @@ const SignInForm = (props: SignInFormProps) => {
             }`}
             autoComplete="current-password"
           />
+                  {errors.password && (
+            <div className="error-message">{errors.password}</div>
+          )}
         </div>
         <Link to="/sign-up" className="links signInForm__forgot">
           Forgot password?

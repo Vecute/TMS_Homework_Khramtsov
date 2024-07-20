@@ -19,13 +19,18 @@ const SignUpForm = (props: SignUpFormProps) => {
   const navigate = useNavigate(); // Хук для навигации по маршрутам
   const dispatch = useDispatch(); // Использование useDispatch для создания функции dispatch
 
-  // Массив, содержащий все поля ввода
-  const inputs = [name, email, password, confirmPassword];
-
   // Создание ссылки для фокусировки на элементе ввода
   const focusRef = useRef<HTMLInputElement | null>(null);
   // Состояние для отслеживания первого рендеринга
   const [isInitialRender, setIsInitialRender] = useState(true);
+
+  // Состояние для хранения сообщений об ошибках
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   // Хук эффекта для установки фокуса на первое поле ввода при первом рендеринге
   useEffect(() => {
@@ -40,30 +45,101 @@ const SignUpForm = (props: SignUpFormProps) => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // Предотвращение стандартного поведения формы
 
+    // Сбрасываем сообщения об ошибках
+    setErrors({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+
     let isValid = true; // Переменная для проверки валидности формы
     focusRef.current = null; // Сброс ссылки на элемент для фокусировки
 
-    // Проверка каждого поля ввода на пустоту
-    for (const input of inputs) {
-      if (input.value === "") {
-        input.setIsValid(false); // Установка состояния валидности в false
-        isValid = false; // Установка валидности формы в false
-        if (!focusRef.current) {
-          focusRef.current = input.ref.current; // Установка ссылки на первое невалидное поле ввода
-        }
-      } else {
-        input.setIsValid(true); // Установка состояния валидности в true
-      }
+    // Валидация имени
+    if (name.value.trim() === "") { // Проверяем, пустое ли поле имени после удаления пробелов с начала и конца строки
+      setErrors((prevErrors) => ({
+        ...prevErrors, // Сохраняем предыдущие ошибки
+        name: "Name is required", // Устанавливаем сообщение об ошибке для имени
+      }));
+      name.setIsValid(false); // Устанавливаем состояние валидности имени в false
+      isValid = false; // Помечаем форму как невалидную
+      focusRef.current = name.ref.current; // Устанавливаем фокус на поле имени
+    } else {
+      name.setIsValid(true); // Если имя валидное, устанавливаем состояние валидности в true
     }
 
-    // Проверка совпадения паролей
-    if (password.value !== confirmPassword.value) {
+    // Валидация email
+    if (email.value === "") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "Email is required",
+      }));
+      isValid = false;
+      email.setIsValid(false);
+      if (!focusRef.current) { // Если фокус еще не установлен, устанавливаем его на поле email
+        focusRef.current = email.ref.current;
+      }
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { // Проверяем, соответствует ли email регулярному выражению
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "Invalid email format",
+      }));
+      isValid = false;
+      email.setIsValid(false);
+      if (!focusRef.current) {
+        focusRef.current = email.ref.current;
+      }
+    } else {
+      email.setIsValid(true);
+    }
+
+    // Валидация пароля
+    if (password.value === "") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: "Password is required",
+      }));
+      password.setIsValid(false);
+      isValid = false;
+      if (!focusRef.current) {
+        focusRef.current = password.ref.current;
+      }
+    } else if (password.value.length < 8) { // Проверяем длину пароля
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: "Password must be at least 8 characters long",
+      }));
+      isValid = false;
+      password.setIsValid(false);
+      if (!focusRef.current) {
+        focusRef.current = password.ref.current;
+      }
+    } else {
+      password.setIsValid(true);
+    }
+
+    // Валидация подтверждения пароля
+    if (confirmPassword.value === "") { // Проверяем, пустое ли поле подтверждения пароля
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        confirmPassword: "Confirm Password is required",
+      }));
       confirmPassword.setIsValid(false);
       isValid = false;
       if (!focusRef.current) {
         focusRef.current = confirmPassword.ref.current;
       }
-      // Очистка поля подтверждения пароля
+    } else if (password.value !== confirmPassword.value) { // Сравниваем пароль и подтверждение пароля
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        confirmPassword: "Passwords do not match",
+      }));
+      confirmPassword.setIsValid(false);
+      isValid = false;
+      if (!focusRef.current) {
+        focusRef.current = confirmPassword.ref.current;
+      }
     } else {
       confirmPassword.setIsValid(true);
     }
@@ -119,6 +195,7 @@ const SignUpForm = (props: SignUpFormProps) => {
             placeholder="Your name"
             className={`signUpForm__input ${!name.isValid ? "invalid" : ""}`}
           />
+          {errors.name && <div className="error-message">{errors.name}</div>}
         </div>
         <div className="signUpForm__input-container">
           <label htmlFor="email" className="signUpForm__label">
@@ -134,6 +211,7 @@ const SignUpForm = (props: SignUpFormProps) => {
             className={`signUpForm__input ${!email.isValid ? "invalid" : ""}`}
             autoComplete="username"
           />
+          {errors.email && <div className="error-message">{errors.email}</div>}
         </div>
         <div className="signUpForm__input-container">
           <label htmlFor="password" className="signUpForm__label">
@@ -151,6 +229,9 @@ const SignUpForm = (props: SignUpFormProps) => {
             }`}
             autoComplete="new-password"
           />
+          {errors.password && (
+            <div className="error-message">{errors.password}</div>
+          )}
         </div>
         <div className="signUpForm__input-container">
           <label htmlFor="confirm-password" className="signUpForm__label">
@@ -168,6 +249,9 @@ const SignUpForm = (props: SignUpFormProps) => {
             }`}
             autoComplete="new-password"
           />
+          {errors.confirmPassword && (
+            <div className="error-message">{errors.confirmPassword}</div>
+          )}
         </div>
         <button type="submit" className="signUpForm__button">
           Sign Up
