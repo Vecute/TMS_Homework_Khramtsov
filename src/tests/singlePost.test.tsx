@@ -4,7 +4,7 @@ import { fetchPostById } from '../thunk/fetchPostById';
 // Mock для thunk'a fetchPostById - заменяем реальный thunk на мок-функцию, чтобы не выполнять реальные сетевые запросы во время тестов
 jest.mock('../thunk/fetchPostById');
 
-// Описываем набор тестов для singlePostSlice
+// Описываем набор тестов для singlePost
 describe('singlePostSlice', () => {
   // Определяем начальное состояние для тестов
   const initialState: SinglePostState = {
