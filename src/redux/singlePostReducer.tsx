@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { PostProps } from "../components/PostCard";
 import { fetchPostById } from "../thunk/fetchPostById";
 
-interface SinglePostState {
+export interface SinglePostState {
   post: PostProps | null; // Объект поста или null, если пост не загружен
   loading: boolean; // Флаг загрузки
   error: string | null; // Сообщение об ошибке
@@ -31,7 +31,7 @@ const singlePostSlice = createSlice({
       .addCase(fetchPostById.rejected, (state, action) => { // Обработка ошибки при запросе (rejected)
         state.loading = false; // Устанавливаем флаг загрузки в false
         // Сохраняем сообщение об ошибке, если оно есть, иначе - "Unknown error occurred."
-        state.error = action.error.message || "Unknown error occurred."; 
+        state.error = action.error?.message || "Unknown error occurred.";
       });
   },
 });
