@@ -1,0 +1,71 @@
+:root {
+    --font-color: #333333;
+    --border-hover-color: #333333;
+    --background-color: #eeeeee;
+    --border-color: #dddddd;
+    --link-color: #6495ed;
+    --shadow-color: #00000033;
+    --accent-color: #1e2cb1;
+    --accent-font-color: #eeeeee;
+  }
+  
+  [data-theme="dark"] {
+    --font-color: #eeeeee;
+    --border-hover-color: #eeeeee;
+    --background-color: #333333;
+    --border-color: #97979738;
+    --link-color: #add8e6;
+    --shadow-color: #c2bdbd26;
+  }
+  
+  body {
+    background-color: var(--background-color);
+    color: var(--font-color);
+  }
+  
+  .links {
+    color: var(--link-color);
+    cursor: pointer;
+    &:hover {
+      color: var(--accent-color);
+    }
+  }
+
+.toggle-theme-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+  }
+  
+
+  .theme-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: transparent;
+    cursor: pointer; 
+    width: 35px;
+    height: 35px;
+    transition: all 0.3s linear;
+    &.light {
+      &:hover svg {
+        fill: #FFC10A;
+      }
+      &.active {
+        background-color: var(--background-color);
+      }
+    }
+  
+    &.dark {
+      &:hover svg {
+        fill: #FFC10A;
+      }
+      &.active {
+        background-color: var(--background-color);
+      }
+    }
+  }
