@@ -1,0 +1,17 @@
+.account-button {
+  background-color: transparent;
+  border: none;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  & path {
+    fill: var(--icon-color);
+    transition: all 0.3s linear;
+  }
+
+  @media (hover: hover) {
+    &:hover path {
+      fill: var(--icon-hover-color);
+    }
+  }
+}
